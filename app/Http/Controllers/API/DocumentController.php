@@ -50,9 +50,25 @@ class DocumentController extends Controller
             $book = Booking::where('booking_id', $booking)->first();
             $book->status = $document . ' Received';
             $book->save();
-            return response()->json('Success upload Document');
+            return response()->json('Success Upload Document');
         } else {
             return response()->json(['error' => 'Error Upload Document'], 500);
+        }
+    }
+
+    public function updateDocument(Request $request, $document_id)
+    {
+        $request->validate([
+            'document' => 'required',
+        ]);
+        if ($request->hasFile('document')) {
+            $path = $request->file('document')->store('public/document');
+            $document = Document::where('document_id', $document_id)->first();
+            $document->directory = $path;
+            $document->save();
+            return response()->json('Success Update Document');
+        } else {
+            return response()->json(['error' => 'Error Update Document'], 500);
         }
     }
 }

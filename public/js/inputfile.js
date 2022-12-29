@@ -49,3 +49,27 @@ function uploadDocument(document, booking_id) {
         },
     });
 }
+
+function updateDocument(document_id) {
+    var formData = new FormData();
+    formData.append("document", doc);
+    formData.append("_method", "PUT");
+    $.ajax({
+        type: "POST",
+        url: "/api/update-document/" + document_id,
+        data: formData,
+        contentType: false,
+        processData: false,
+        cache: false,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        dataType: "json",
+        success: function (data) {
+            window.location.reload();
+        },
+        error: function (data, request, status, error) {
+            alert(data.responseJSON.error);
+        },
+    });
+}

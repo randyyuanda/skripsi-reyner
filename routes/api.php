@@ -26,3 +26,4 @@ Route::put('/status-booking/{booking_id}/{status}', '\App\Http\Controllers\API\B
 Route::get('/monthly-shipment', '\App\Http\Controllers\API\BookingController@monthlyShipment');
 Route::get('/monthly-shipment-klien/{users_id}', '\App\Http\Controllers\API\BookingController@monthlyShipmentKlien');
 Route::post('/upload-document/{booking_id}/{document}', '\App\Http\Controllers\API\DocumentController@uploadDocument');
+Route::put('/update-document/{document_id}', '\App\Http\Controllers\API\DocumentController@updateDocument');

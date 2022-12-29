@@ -107,7 +107,7 @@ class HomeController extends Controller
         // dd($book->document[0]->document_name);
         // }
         return view('/admin/detail-booking-admin', [
-            "title" => "listbooking",
+            "title" => "list-booking",
             "book" => $book
         ]);
     }
@@ -133,7 +133,7 @@ class HomeController extends Controller
             $book->nama_klien = User::where('id', $book->users_id)->first()->name;
         }
         return view('/admin/list-book-klien', [
-            "title" => "home",
+            "title" => "list-booking",
             "listbooking" => $listbooking,
         ]);
     }

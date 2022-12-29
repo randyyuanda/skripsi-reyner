@@ -178,14 +178,25 @@
           <div class="card">
             <div class="card-body">
               <div class="row">
-                <h4 class="card-title">Delivery Order <a style="cursor: pointer; color: #ff6e7f"><i class="mdi mdi-reload menu-icon mr-2"> </i></a>
+                <h4 class="card-title">
+                  Delivery Order
                 </h4>
                 @if ($book->document->count() > 0 )
-                <div style="display: inline-flex;">
+                <div style="display: inline-flex;" id="div-document-do">
                   <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[0]->directory))  }}" target="_blank" style="display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
                   </a>
-                  <a class=" btn nav-link btn-gradient-primary ml-2" href="{{ url(Storage::url($book->document[0]->directory))  }}" target="_blank" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                  <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-do','div-upload-do')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
                   </a>
+                </div>
+                <div id="div-upload-do" style="display: none;">
+                  <div class="mb-3">
+                    <div class="file-drop-area form-control ">
+                      <span class="fake-btn">Choose files</span>
+                      <span class="file-msg">or drag and drop files here</span>
+                      <input class="file-input" type="file">
+                    </div>
+                  </div>
+                  <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[0]->document_id }}')">Submit</button>
                 </div>
 
                 @endif
@@ -219,8 +230,23 @@
             <div class="card-body">
               <h4 class="card-title">PEB (Pemberitahuan Ekspor Barang)</h4>
               @if ($book->document->count() > 2 )
-              <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[2]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-              </a>
+              <div style="display: inline-flex;" id="div-document-peb">
+
+                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[2]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                </a>
+                <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-peb','div-upload-peb')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                </a>
+              </div>
+              <div id="div-upload-peb" style="display: none;">
+                <div class="mb-3">
+                  <div class="file-drop-area form-control ">
+                    <span class="fake-btn">Choose files</span>
+                    <span class="file-msg">or drag and drop files here</span>
+                    <input class="file-input" type="file">
+                  </div>
+                </div>
+                <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[2]->document_id }}')">Submit</button>
+              </div>
               @endif
               @if ($book->document->count() == 2 )
               <div class="mb-3">
@@ -240,8 +266,23 @@
             <div class="card-body">
               <h4 class="card-title">BL (Bill Of Lading)</h4>
               @if ($book->document->count() > 3 )
-              <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[3]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-              </a>
+              <div style="display: inline-flex;" id="div-document-bl">
+
+                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[3]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                </a>
+                <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-bl','div-upload-bl')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                </a>
+              </div>
+              <div id="div-upload-bl" style="display: none;">
+                <div class="mb-3">
+                  <div class="file-drop-area form-control ">
+                    <span class="fake-btn">Choose files</span>
+                    <span class="file-msg">or drag and drop files here</span>
+                    <input class="file-input" type="file">
+                  </div>
+                </div>
+                <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[3]->document_id }}')">Submit</button>
+              </div>
               @endif
               @if ($book->document->count() == 3 )
               <div class="mb-3">
@@ -261,8 +302,23 @@
             <div class="card-body">
               <h4 class="card-title">COO (Certificate Of Origin)</h4>
               @if ($book->document->count() > 4 )
-              <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[3]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-              </a>
+              <div style="display: inline-flex;" id="div-document-coo">
+
+                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[4]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                </a>
+                <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-coo','div-upload-coo')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                </a>
+              </div>
+              <div id="div-upload-coo" style="display: none;">
+                <div class="mb-3">
+                  <div class="file-drop-area form-control ">
+                    <span class="fake-btn">Choose files</span>
+                    <span class="file-msg">or drag and drop files here</span>
+                    <input class="file-input" type="file">
+                  </div>
+                </div>
+                <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[4]->document_id }}')">Submit</button>
+              </div>
               @endif
               @if ($book->document->count() == 4 )
               <div class="mb-3">
@@ -500,76 +556,46 @@
     }
 
     function print() {
-      // html2pdf(document.getElementById('printData'));
 
-      html2canvas(document.getElementById('printData'), {
-        onrendered: function(canvas) {
+      // html2canvas(document.getElementById('printData'), {
+      //   onrendered: function(canvas) {
+      //     var pdf = new jsPDF('p', 'pt', 'letter');
+      //     for (var i = 0; i <= document.getElementById('printData').clientHeight / 980; i++) {
+      //       var srcImg = canvas;
+      //       var sX = 0;
+      //       var sY = 980 * i;
+      //       var sWidth = 900;
+      //       var sHeight = 980;
+      //       var dX = 0;
+      //       var dY = 0;
+      //       var dWidth = 900;
+      //       var dHeight = 980;
 
-          //! MAKE YOUR PDF
-          var pdf = new jsPDF('p', 'pt', 'letter');
+      //       window.onePageCanvas = document.createElement("canvas");
+      //       onePageCanvas.setAttribute('width', 900);
+      //       onePageCanvas.setAttribute('height', 980);
+      //       var ctx = onePageCanvas.getContext('2d');
+      //       ctx.drawImage(srcImg, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
+      //       var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
+      //       var width = onePageCanvas.width;
+      //       var height = onePageCanvas.clientHeight;
 
-          for (var i = 0; i <= document.getElementById('printData').clientHeight / 980; i++) {
-            //! This is all just html2canvas stuff
-            var srcImg = canvas;
-            var sX = 0;
-            var sY = 980 * i; // start 980 pixels down for every new page
-            var sWidth = 900;
-            var sHeight = 980;
-            var dX = 0;
-            var dY = 0;
-            var dWidth = 900;
-            var dHeight = 980;
+      //       if (i > 0) {
+      //         pdf.addPage(612, 791);
+      //       }
+      //       pdf.setPage(i + 1);
+      //       pdf.addImage(canvasDataURL, 'PNG', 20, 40, (width * .62), (height * .62));
 
-            window.onePageCanvas = document.createElement("canvas");
-            onePageCanvas.setAttribute('width', 900);
-            onePageCanvas.setAttribute('height', 980);
-            var ctx = onePageCanvas.getContext('2d');
-            // details on this usage of this function: 
-            // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images#Slicing
-            ctx.drawImage(srcImg, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
+      //     }
+      //     pdf.save('print.pdf');
 
-            // document.body.appendChild(canvas);
-            var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
-
-            var width = onePageCanvas.width;
-            var height = onePageCanvas.clientHeight;
-
-            //! If we're on anything other than the first page,
-            // add another page
-            if (i > 0) {
-              pdf.addPage(612, 791); //8.5" x 11" in pts (in*72)
-            }
-            //! now we declare that we're working on that page
-            pdf.setPage(i + 1);
-            //! now we add content to that page!
-            pdf.addImage(canvasDataURL, 'PNG', 20, 40, (width * .62), (height * .62));
-
-          }
-          //! after the for loop is finished running, we save the pdf.
-          pdf.save('test.pdf');
-        }
-      });
-
-    }
-
-    function demoFromHTML() {
-      html2canvas(document.getElementById('printData'), {
-        onrendered: function(canvasObj) {
-          var pdf = new jsPDF('P', 'pt', 'a4'),
-            pdfConf = {
-              pagesplit: false,
-              backgroundColor: '#FFF'
-            };
-          var width = pdf.internal.pageSize.getWidth();
-          var height = pdf.internal.pageSize.getHeight();
-          document.body.appendChild(canvasObj); //appendChild is required for html to add page in pdf
-          pdf.addHTML(canvasObj, 0, 0, pdfConf, function() {
-            document.body.removeChild(canvasObj);
-            //pdf.addPage();
-            pdf.save('Test.pdf');
-          });
-        }
-      });
+      //   }
+      // });
+      window.frames["print_frame"].document.body.innerHTML = document.getElementById('printData').innerHTML;
+      setTimeout(() => {
+        window.frames["print_frame"].window.focus();
+        window.frames["print_frame"].window.print();
+      }, 400);
     }
 
     function testPrint() {
@@ -585,25 +611,12 @@
           pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
           pdf.save('download.pdf');
         });
-      // window.frames["print_frame"].document.body.innerHTML = document.getElementById('printData').innerHTML;
-      // setTimeout(() => {
-      //   window.frames["print_frame"].window.focus();
-      //   window.frames["print_frame"].window.print();
-      // }, 400);
     }
 
-    function convertHTMLToPDF() {
+    function updateDoc(id1, id2) {
+      document.getElementById(id2).style.display = 'block';
+      document.getElementById(id1).style.display = 'none';
 
-      var doc = new jsPDF('1', 'mm', [1200, 1210]);
-      var pdfjs = document.querySelector('#printData');
-      // Convert HTML invoice template source into PDF in JavaScript   
-      doc.html(pdfjs, {
-        callback: function(doc) {
-          doc.save("output.pdf");
-        },
-        x: 10,
-        y: 10
-      });
     }
   </script>
   <!-- End custom js for this page -->

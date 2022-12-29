@@ -191,8 +191,22 @@
               </h4>
               <div class="mb-3">
                 @if ($book->document->count() > 1 )
-                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[1]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-                </a>
+                <div style="display: inline-flex;" id="div-document-do">
+                  <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[1]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                  </a>
+                  <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc()" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                  </a>
+                </div>
+                <div id="div-upload-do" style="display: none;">
+                  <div class="mb-3">
+                    <div class="file-drop-area form-control ">
+                      <span class="fake-btn">Choose files</span>
+                      <span class="file-msg">or drag and drop files here</span>
+                      <input class="file-input" type="file">
+                    </div>
+                  </div>
+                  <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[1]->document_id }}')">Submit</button>
+                </div>
                 @endif
                 @if ($book->document->count() == 1 && $book->status == 'Delivery Order Received' ) <div class="mb-3">
                   <div class="file-drop-area form-control ">
@@ -261,6 +275,25 @@
   </div>
   <!-- page-body-wrapper ends -->
   </div>
+  <div class="modal fade" id="ModalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="justify-content: center;">
+          <h2 class="modal-title" id="exampleModalCenterTitle" style="color: rgb(218, 21, 90)"></h2>
+          <!-- <button type="button" class="close" aria-label="Close" onclick="$('#ModalDeleteAdmin').modal('hide')">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+        </div>
+        <div class="modal-body" id="textModal" style="text-align: center;">
+          Are you sure you want to change status booking?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="$('#ModalConfirm').modal('hide')">No</button>
+          <button type="button" class="btn btn-primary" style="background-color: rgb(218, 21, 90);" onclick="changeStatus()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="/vendors/js/vendor.bundle.base.js"></script>
@@ -279,7 +312,12 @@
   <script src="/js/todolist.js"></script>
 
   <script src="/js/inputfile.js"></script>
-
+  <script>
+    function updateDoc() {
+      document.getElementById("div-upload-do").style.display = 'block';
+      document.getElementById("div-document-do").style.display = 'none';
+    }
+  </script>
   <!-- End custom js for this page -->
 </body>
 

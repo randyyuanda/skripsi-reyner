@@ -33,7 +33,7 @@
                 <i class="mdi mdi mdi-account-card-details menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ ($title === 'list-booking') ? 'active' : ''}}">
             <a class="nav-link" href="/all-book">
                 <span class="menu-title">All Booking</span>
                 <i class="mdi mdi-library-books menu-icon"></i>
