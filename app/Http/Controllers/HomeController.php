@@ -174,4 +174,22 @@ class HomeController extends Controller
             "book" => $book
         ]);
     }
+
+    public function createInvoice($id)
+    {
+        $book = Booking::where('booking_id', $id)->first();
+        return view('/admin/create-invoice', [
+            "title" => "list-booking",
+            "book" => $book
+        ]);
+    }
+
+    public function tableInvoice()
+    {
+        // $listadmin = User::where('role', 'admin')->get();
+        return view('/admin/table-invoice', [
+            "title" => "list-admin",
+            // "listadmin" => $listadmin,
+        ]);
+    }
 }

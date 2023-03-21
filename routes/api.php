@@ -23,7 +23,9 @@ Route::put('/update-booking/{booking_id}', '\App\Http\Controllers\API\BookingCon
 Route::delete('/delete-user/{users_id}', '\App\Http\Controllers\API\UserController@deleteUser');
 Route::delete('/delete-booking/{booking_id}', '\App\Http\Controllers\API\BookingController@deleteBook');
 Route::put('/status-booking/{booking_id}/{status}', '\App\Http\Controllers\API\BookingController@changeStatusBook');
-Route::get('/monthly-shipment', '\App\Http\Controllers\API\BookingController@monthlyShipment');
-Route::get('/monthly-shipment-klien/{users_id}', '\App\Http\Controllers\API\BookingController@monthlyShipmentKlien');
+Route::get('/monthly-shipment/{year}', '\App\Http\Controllers\API\BookingController@monthlyShipment');
+Route::get('/monthly-shipment-klien/{users_id}/{year}', '\App\Http\Controllers\API\BookingController@monthlyShipmentKlien');
 Route::post('/upload-document/{booking_id}/{document}', '\App\Http\Controllers\API\DocumentController@uploadDocument');
 Route::put('/update-document/{document_id}', '\App\Http\Controllers\API\DocumentController@updateDocument');
+Route::put('/complete-booking/{booking_id}', '\App\Http\Controllers\API\BookingController@completeBooking');
+// Route::post('/generate-pdf', '\App\Http\Controllers\API\PDFController@generatePDF');

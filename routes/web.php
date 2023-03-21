@@ -36,7 +36,8 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/create-klien', [App\Http\Controllers\HomeController::class, 'createKlien']);
     Route::get('/create-admin', [App\Http\Controllers\HomeController::class, 'createAdmin']);
     Route::get('/all-book', [App\Http\Controllers\HomeController::class, 'allBook']);
+    Route::get('/create-invoice/{booking_id}', [App\Http\Controllers\HomeController::class, 'createInvoice']);
     Route::get('/detail-booking-admin/{booking_id}', [App\Http\Controllers\HomeController::class, 'detailBookingAdmin']);
 });
-
-Route::get('generate-invoice-pdf', array('as' => 'generate.invoice.pdf', 'uses' => 'PDFController@generateInvoicePDF'));
+Route::get('/table-invoice', [App\Http\Controllers\HomeController::class, 'tableInvoice']);
+Route::get('/generate-pdf', [App\Http\Controllers\API\PDFController::class, 'generatePDF']);

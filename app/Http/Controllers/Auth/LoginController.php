@@ -40,8 +40,7 @@ class LoginController extends Controller
                 }
             }
         }
-
-        return Redirect::back()->with('error',  'Your Email or Password is incorrect!');
+        return Redirect::back()->withErrors(['msg' => 'Your Email or Password is incorrect!']);
     }
 
     /**

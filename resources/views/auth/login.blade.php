@@ -32,24 +32,17 @@
               </div>
               <h4>Login</h4>
               <h6 class="font-weight-light">Sign in to continue.</h6>
+              @if($errors->any())
+              <h5 class="help-block text-danger">{{$errors->first()}}</h5>
+              @endif
               <form class="pt-3" method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="form-group">
                   <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" placeholder="Username" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                  @error('email')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
-                  @enderror
                   <!-- <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Username"> -->
                 </div>
                 <div class="form-group">
                   <input id="password" type="password" class="form-control form-control-lg @error('password')  is-invalid @enderror" placeholder="Password" name="password" required autocomplete="current-password">
-                  @error('password')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
-                  @enderror
                   <!-- <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password"> -->
                 </div>
                 <!-- <div class="form-group">

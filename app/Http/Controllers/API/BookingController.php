@@ -71,37 +71,23 @@ class BookingController extends Controller
     return response()->json($book);
   }
 
-  public function monthlyShipment()
+  public function completeBooking(Request $request, $booking_id)
   {
-    $book = Booking::where('date_shipment', 'like', Carbon::now()->year . '%')->get()
-      ->groupBy(function ($date) {
-        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
-      });
-    $bookmcount = [];
-    $bookArr = [];
-
-    foreach ($book as $key => $value) {
-      $bookmcount[(int)$key] = count($value);
-    }
-
-    for ($i = 1; $i <= 12; $i++) {
-      if (!empty($bookmcount[$i])) {
-        array_push($bookArr, $bookmcount[$i]);
-      } else {
-        array_push($bookArr, 0);
-      }
-    }
-    return response()->json($bookArr);
+    $book = Booking::where('booking_id', $booking_id)->first();
+    $book->status = $request->get('Shipment Completed');
+    $book->save();
+    return response()->json($book);
   }
 
-  public function monthlyShipmentKlien($klien)
+  public function monthlyShipment($year)
   {
-    $book = Booking::where('date_shipment', 'like', Carbon::now()->year . '%')->where('users_id', $klien)->get()
+    // Not Completed
+    $book = Booking::where('date_shipment', 'like', $year . '%')->where('status', '!=', 'Shipment Completed')->get()
       ->groupBy(function ($date) {
         return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
       });
     $bookmcount = [];
-    $bookArr = [];
+    $bookArrNotCompleted = [];
 
     foreach ($book as $key => $value) {
       $bookmcount[(int)$key] = count($value);
@@ -109,12 +95,76 @@ class BookingController extends Controller
 
     for ($i = 1; $i <= 12; $i++) {
       if (!empty($bookmcount[$i])) {
-        array_push($bookArr, $bookmcount[$i]);
+        array_push($bookArrNotCompleted, $bookmcount[$i]);
       } else {
-        array_push($bookArr, 0);
+        array_push($bookArrNotCompleted, 0);
       }
     }
-    return response()->json($bookArr);
+
+    // Completed
+    $bookCompleted = Booking::where('date_shipment', 'like', $year . '%')->where('status', 'Shipment Completed')->get()
+      ->groupBy(function ($date) {
+        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+      });
+    $bookmcountCompleted = [];
+    $bookArrCompleted = [];
+
+    foreach ($bookCompleted as $key => $value) {
+      $bookmcountCompleted[(int)$key] = count($value);
+    }
+
+    for ($i = 1; $i <= 12; $i++) {
+      if (!empty($bookmcountCompleted[$i])) {
+        array_push($bookArrCompleted, $bookmcountCompleted[$i]);
+      } else {
+        array_push($bookArrCompleted, 0);
+      }
+    }
+    return response()->json([$bookArrNotCompleted, $bookArrCompleted]);
+  }
+
+  public function monthlyShipmentKlien($klien, $year)
+  {
+    // Not Completed
+    $book = Booking::where('date_shipment', 'like', $year . '%')->where('status', '!=', 'Shipment Completed')->where('users_id', $klien)->get()
+      ->groupBy(function ($date) {
+        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+      });
+    $bookmcount = [];
+    $bookArrNotCompleted = [];
+
+    foreach ($book as $key => $value) {
+      $bookmcount[(int)$key] = count($value);
+    }
+
+    for ($i = 1; $i <= 12; $i++) {
+      if (!empty($bookmcount[$i])) {
+        array_push($bookArrNotCompleted, $bookmcount[$i]);
+      } else {
+        array_push($bookArrNotCompleted, 0);
+      }
+    }
+
+    // Completed
+    $bookCompleted = Booking::where('date_shipment', 'like', $year . '%')->where('status', 'Shipment Completed')->where('users_id', $klien)->get()
+      ->groupBy(function ($date) {
+        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+      });
+    $bookmcountCompleted = [];
+    $bookArrCompleted = [];
+
+    foreach ($bookCompleted as $key => $value) {
+      $bookmcountCompleted[(int)$key] = count($value);
+    }
+
+    for ($i = 1; $i <= 12; $i++) {
+      if (!empty($bookmcountCompleted[$i])) {
+        array_push($bookArrCompleted, $bookmcountCompleted[$i]);
+      } else {
+        array_push($bookArrCompleted, 0);
+      }
+    }
+    return response()->json([$bookArrNotCompleted, $bookArrCompleted]);
   }
 
   public function deleteBook($book_id)

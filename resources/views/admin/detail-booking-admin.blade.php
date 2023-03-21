@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Purple Admin</title>
+  <title>ASET</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
@@ -20,6 +20,35 @@
   <!-- End layout styles -->
   <link rel="shortcut icon" href="/images/favicon.ico" />
   <style>
+    .tahap-success {
+      background-image: linear-gradient(to right, rgba(74, 45, 255, 0.35), rgba(185, 37, 255, 0.35));
+      padding: 1.5rem 2.5rem !important;
+    }
+
+    .tahap-failed {
+      background: rgba(208, 208, 208, 1);
+      padding: 1.5rem 2.5rem !important;
+    }
+
+    .text-tahap-failed {
+      font-size: 24px !important;
+      color: rgba(100, 100, 100, 1) !important;
+    }
+
+    .card-failed {
+      background-color: rgba(196, 196, 196, 1);
+    }
+
+    .text-tahap-success {
+      font-size: 24px !important;
+      color: white !important;
+    }
+
+    .text-tahap-failed span,
+    .text-tahap-success span {
+      font-size: 12px;
+    }
+
     .mb-0 {
       margin-bottom: 0px !important;
     }
@@ -176,45 +205,108 @@
         </div>
         <div class="col-12 grid-margin stretch-card">
           <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <h4 class="card-title">
-                  Delivery Order
-                </h4>
-                @if ($book->document->count() > 0 )
-                <div style="display: inline-flex;" id="div-document-do">
-                  <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[0]->directory))  }}" target="_blank" style="display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-                  </a>
-                  <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-do','div-upload-do')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
-                  </a>
-                </div>
-                <div id="div-upload-do" style="display: none;">
-                  <div class="mb-3">
-                    <div class="file-drop-area form-control ">
-                      <span class="fake-btn">Choose files</span>
-                      <span class="file-msg">or drag and drop files here</span>
-                      <input class="file-input" type="file">
+            <div class="card-body {{ $book->document->count() < 1 ? 'tahap-failed' : 'tahap-success'}}">
+              <strong>
+                <h4 class="card-title {{ $book->document->count() < 1 ? 'text-tahap-failed' : 'text-tahap-success'}}" style="font-weight: bold;">Tahap Pertama</h4>
+              </strong>
+              <div class="card {{ $book->document->count() < 1 ? 'card-failed' : ''}}">
+                <div class="card-body" style="padding: 1rem">
+                  <div class="row">
+                    <h4 class="card-title">Delivery Order</h4>
+                    @if ($book->document->count() > 0 )
+                    <div style="display: inline-flex;" id="div-document-do">
+                      <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[0]->directory))  }}" target="_blank" style="display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                      </a>
+                      <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-do','div-upload-do')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                      </a>
                     </div>
+                    <div id="div-upload-do" style="display: none;">
+                      <div class="mb-3">
+                        <div class="file-drop-area form-control ">
+                          <span class="fake-btn">Choose files</span>
+                          <span class="file-msg">or drag and drop files here</span>
+                          <input class="file-input" type="file">
+                        </div>
+                      </div>
+                      <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[0]->document_id }}')">Submit</button>
+                    </div>
+                    @endif
                   </div>
-                  <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[0]->document_id }}')">Submit</button>
+                  @if ($book->document->count() < 1 && $book->status == 'Approved' )
+                    <div class="mb-3">
+                      <div class="file-drop-area form-control ">
+                        <span class="fake-btn">Choose files</span>
+                        <span class="file-msg">or drag and drop files here</span>
+                        <input class="file-input" type="file">
+                      </div>
+                    </div>
+                    <button class="btn btn-gradient-primary" onclick="uploadDocument('DO','{{ $book->booking_id }}')">Submit</button>
+                    @endif
                 </div>
-
-                @endif
               </div>
-              @if ($book->document->count() < 1 && $book->status == 'Approved' )
-                <div class="mb-3">
-                  <div class="file-drop-area form-control ">
-                    <span class="fake-btn">Choose files</span>
-                    <span class="file-msg">or drag and drop files here</span>
-                    <input class="file-input" type="file">
-                  </div>
-                </div>
-                <button class="btn btn-gradient-primary" onclick="uploadDocument('DO','{{ $book->booking_id }}')">Submit</button>
-                @endif
             </div>
+
           </div>
         </div>
         <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body {{ $book->document->count() < 1 ? 'tahap-failed' : 'tahap-success'}}">
+              <strong>
+                <h4 class="card-title {{ $book->document->count() < 1 ? 'text-tahap-failed' : 'text-tahap-success'}}" style="font-weight: bold;">Tahap Kedua</h4>
+              </strong>
+              <div class="card {{ $book->document->count() < 2 ? 'card-failed' : ''}}">
+                <div class="card-body" style="padding: 1rem">
+                  <div class="row">
+                    <h4 class="card-title">Invoice Packing List</h4>
+                    @if ($book->document->count() > 1 )
+                    <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[1]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                    </a>
+                    @endif
+                  </div>
+                </div>
+              </div>
+              <div class="card {{ $book->document->count() < 2 ? 'card-failed' : ''}}" style="margin-top: 15px">
+                <div class="card-body" style="padding: 1rem">
+                  <div class="row">
+                    <h4 class="card-title">PEB (Pemberitahuan Ekspor Barang)</h4>
+                    @if ($book->document->count() > 2 )
+                    <div style="display: inline-flex;padding-left: 0px" id="div-document-peb">
+
+                      <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[2]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                      </a>
+                      <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-peb','div-upload-peb')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                      </a>
+                    </div>
+                    <div id="div-upload-peb" style="display: none;">
+                      <div class="mb-3">
+                        <div class="file-drop-area form-control ">
+                          <span class="fake-btn">Choose files</span>
+                          <span class="file-msg">or drag and drop files here</span>
+                          <input class="file-input" type="file">
+                        </div>
+                      </div>
+                      <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[2]->document_id }}')">Submit</button>
+                    </div>
+                    @endif
+                    @if ($book->document->count() == 2 )
+                    <div class="mb-3">
+                      <div class="file-drop-area form-control ">
+                        <span class="fake-btn">Choose files</span>
+                        <span class="file-msg">or drag and drop files here</span>
+                        <input class="file-input" type="file">
+                      </div>
+                    </div>
+                    <button class="btn btn-gradient-primary" onclick="uploadDocument('PEB','{{ $book->booking_id }}')">Submit</button>
+                    @endif
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- Invoice Packing List -->
+        <!-- <div class="col-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Invoice Packing List</h4>
@@ -224,8 +316,9 @@
               @endif
             </div>
           </div>
-        </div>
-        <div class="col-12 grid-margin stretch-card">
+        </div> -->
+        <!-- PEB -->
+        <!-- <div class="col-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">PEB (Pemberitahuan Ekspor Barang)</h4>
@@ -260,8 +353,102 @@
               @endif
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body {{ $book->document->count() < 1 ? 'tahap-failed' : 'tahap-success'}}">
+              <strong>
+                <h4 class="card-title {{ $book->document->count() < 1 ? 'text-tahap-failed' : 'text-tahap-success'}}" style="font-weight: bold;">Tahap Ketiga</h4>
+              </strong>
+              <div class="card {{ $book->document->count() < 2 ? 'card-failed' : ''}}">
+                <div class="card-body" style="padding: 1rem">
+                  <div class="row">
+                    <h4 class="card-title">BL (Bill Of Lading)</h4>
+                    @if ($book->document->count() > 3 )
+                    <div style="display: inline-flex; padding-left: 0px" id="div-document-bl">
+
+                      <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[3]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                      </a>
+                      <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-bl','div-upload-bl')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                      </a>
+                    </div>
+                    <div id="div-upload-bl" style="display: none;">
+                      <div class="mb-3">
+                        <div class="file-drop-area form-control ">
+                          <span class="fake-btn">Choose files</span>
+                          <span class="file-msg">or drag and drop files here</span>
+                          <input class="file-input" type="file">
+                        </div>
+                      </div>
+                      <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[3]->document_id }}')">Submit</button>
+                    </div>
+                    @endif
+                    @if ($book->document->count() == 3 )
+                    <div class="mb-3">
+                      <div class="file-drop-area form-control ">
+                        <span class="fake-btn">Choose files</span>
+                        <span class="file-msg">or drag and drop files here</span>
+                        <input class="file-input" type="file">
+                      </div>
+                    </div>
+                    <button class="btn btn-gradient-primary" onclick="uploadDocument('BL','{{ $book->booking_id }}')">Submit</button>
+                    @endif
+                  </div>
+                </div>
+              </div>
+              <div class="card {{ $book->document->count() < 2 ? 'card-failed' : ''}}" style="margin-top: 15px">
+                <div class="card-body" style="padding: 1rem">
+                  <div class="row">
+                    <h4 class="card-title">COO (Certificate Of Origin)</h4>
+                    @if ($book->document->count() > 4 )
+                    <div style="display: inline-flex; padding-left: 0px" id="div-document-coo">
+
+                      <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[4]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                      </a>
+                      <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-coo','div-upload-coo')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
+                      </a>
+                    </div>
+                    <div id="div-upload-coo" style="display: none;">
+                      <div class="mb-3">
+                        <div class="file-drop-area form-control ">
+                          <span class="fake-btn">Choose files</span>
+                          <span class="file-msg">or drag and drop files here</span>
+                          <input class="file-input" type="file">
+                        </div>
+                      </div>
+                      <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[4]->document_id }}')">Submit</button>
+                    </div>
+                    @endif
+                    @if ($book->document->count() == 4 )
+                    <div class="mb-3">
+                      <div class="file-drop-area form-control ">
+                        <span class="fake-btn">Choose files</span>
+                        <span class="file-msg">or drag and drop files here</span>
+                        <input class="file-input" type="file">
+                      </div>
+                    </div>
+                    <button class="btn btn-gradient-primary" onclick="uploadDocument('COO','{{ $book->booking_id }}')">Submit</button>
+
+                    @endif
+                  </div>
+                </div>
+              </div>
+              <div class="card {{ $book->document->count() < 2 ? 'card-failed' : ''}}" style="margin-top: 15px">
+                <div class="card-body" style="padding: 1rem">
+                  <div class="row">
+                    <h4 class="card-title">Issued Invoice</h4>
+                    @if ($book->document->count() == 5 )
+                    <a class="btn btn-gradient-primary" href='/create-invoice/{{ $book->booking_id }}' style="padding-left: 1rem;margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 100px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Invoice</a>
+                    @endif
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- BL -->
+        <!-- <div class="col-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">BL (Bill Of Lading)</h4>
@@ -296,8 +483,9 @@
               @endif
             </div>
           </div>
-        </div>
-        <div class="col-12 grid-margin stretch-card">
+        </div> -->
+        <!-- COO -->
+        <!-- <div class="col-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">COO (Certificate Of Origin)</h4>
@@ -333,14 +521,18 @@
               @endif
             </div>
           </div>
-        </div>
-        <div class="col-12 grid-margin stretch-card">
+        </div> -->
+        <!-- Invoice -->
+        <!-- <div class="col-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Issued Invoice</h4>
+              @if ($book->document->count() == 5 )
+              <a class="btn btn-gradient-primary" href='/create-invoice/{{ $book->booking_id }}'>Invoice</a>
+              @endif
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- content-wrapper ends -->
     </div>
@@ -367,6 +559,7 @@
       </div>
     </div>
   </div>
+
   <div class="modal fade" id="ModalPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
       <div class="modal-content">
@@ -556,41 +749,6 @@
     }
 
     function print() {
-
-      // html2canvas(document.getElementById('printData'), {
-      //   onrendered: function(canvas) {
-      //     var pdf = new jsPDF('p', 'pt', 'letter');
-      //     for (var i = 0; i <= document.getElementById('printData').clientHeight / 980; i++) {
-      //       var srcImg = canvas;
-      //       var sX = 0;
-      //       var sY = 980 * i;
-      //       var sWidth = 900;
-      //       var sHeight = 980;
-      //       var dX = 0;
-      //       var dY = 0;
-      //       var dWidth = 900;
-      //       var dHeight = 980;
-
-      //       window.onePageCanvas = document.createElement("canvas");
-      //       onePageCanvas.setAttribute('width', 900);
-      //       onePageCanvas.setAttribute('height', 980);
-      //       var ctx = onePageCanvas.getContext('2d');
-      //       ctx.drawImage(srcImg, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
-      //       var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
-      //       var width = onePageCanvas.width;
-      //       var height = onePageCanvas.clientHeight;
-
-      //       if (i > 0) {
-      //         pdf.addPage(612, 791);
-      //       }
-      //       pdf.setPage(i + 1);
-      //       pdf.addImage(canvasDataURL, 'PNG', 20, 40, (width * .62), (height * .62));
-
-      //     }
-      //     pdf.save('print.pdf');
-
-      //   }
-      // });
       window.frames["print_frame"].document.body.innerHTML = document.getElementById('printData').innerHTML;
       setTimeout(() => {
         window.frames["print_frame"].window.focus();

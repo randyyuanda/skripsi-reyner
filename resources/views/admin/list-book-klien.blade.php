@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Purple Admin</title>
+  <title>ASET</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
@@ -19,6 +19,32 @@
   <link rel="stylesheet" href="/css/app.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="/images/favicon.ico" />
+  <style>
+    .badge-warning-custom {
+      background: #F9FAC5;
+      color: #C3B000;
+    }
+
+    .badge-danger-custom {
+      background: #FAEBE6;
+      color: #B44100;
+    }
+
+    .badge-success-custom {
+      background: #EEFAE6;
+      color: #19B400;
+    }
+
+    .badge-waiting-custom {
+      background: #E6EEFA;
+      color: #0028B4;
+    }
+
+    .badge-approved-custom {
+      background: #F7E6FA;
+      color: #9000B4;
+    }
+  </style>
 </head>
 
 <body>
@@ -57,8 +83,14 @@
               <th scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">1</th>
               <td scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->nama_klien }}</td>
               <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->date_shipment }}</td>
-              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success' : (($book->status == 'Canceled') ? 'badge-danger' : 'badge-warning') }} ">{{ $book->status}}</label></td>
-              <td><i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil"></i><i class="mdi mdi mdi-delete" onclick="selectBook('booking', '{{ $book->booking_id}}' )"></i></td>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success-custom' : (($book->status == 'Canceled') ? 'badge-danger-custom' : (($book->status == 'Waiting') ? 'badge-waiting-custom' : (($book->status == 'Approved') ? 'badge-approved-custom' : 'badge-warning-custom'))) }} ">{{ $book->status}}</label></td>
+              <td>
+                @if ($book->status == 'Waiting')
+                <i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil" onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')"></i>
+                <i class="mdi mdi mdi-delete" onclick="selectBook('booking', '{{ $book->booking_id}}' )"></i>
+                @endif
+              </td>
+              <!-- <td><i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil"></i><i class="mdi mdi mdi-delete" onclick="selectBook('booking', '{{ $book->booking_id}}' )"></i></td> -->
             </tr>
             @endforeach
             @else

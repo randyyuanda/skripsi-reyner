@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Purple Admin</title>
+  <title>ASET</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
@@ -72,7 +72,19 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">My Bookings</h4>
-                <canvas id="lineChart" style="height:250px"></canvas>
+                <div id="info">
+                  <select class="form-select" id="mySelect" onchange="myFunction()">
+                    <option>Select Year</option>
+                    <?php
+                    $years = range(2000, strftime("%Y", time() + 20));
+                    foreach ($years as $year) : ?>
+                      <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <canvas id="chartJSContainer" width="600" height="250"></canvas>
+
+                <!-- <canvas id="barChart" style="height:250px"></canvas> -->
               </div>
             </div>
           </div>
@@ -105,79 +117,65 @@
     $(document).ready(function() {
       getData();
     });
+
+    function myFunction() {
+      var x = document.getElementById("mySelect").value;
+      start = 1;
+      getData(x);
+    }
+
     var dataGraph = [];
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
+    var year = new Date().getFullYear();
+    var start = 0;
+    var chart = '';
 
-    function getData() {
+    function getData(year = new Date().getFullYear()) {
       $.ajax({
         type: "GET",
-        url: "/api/monthly-shipment-klien/{{ Auth::user()->id }}",
+        url: "/api/monthly-shipment-klien/{{ Auth::user()->id }}/" + year,
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         dataType: "json",
         success: function(data) {
-          console.log(data);
-
-          var dataMonthly = {
-            labels: monthNames,
-            datasets: [{
-              label: '# of Votes',
-              data: data,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1,
-              fill: false
-            }]
-          };
-
           var options = {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
+            type: 'bar',
+            data: {
+              labels: ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+              ],
+              datasets: [{
+                  label: 'On Going',
+                  data: data[0],
+                  backgroundColor: 'red'
+                },
+                {
+                  label: 'Completed',
+                  data: data[1],
+                  backgroundColor: 'blue'
                 }
-              }]
+              ]
             },
-            legend: {
-              display: false
-            },
-            elements: {
-              point: {
-                radius: 0
-              }
-            }
-
-          };
-          if ($("#lineChart").length) {
-            var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
-            var lineChart = new Chart(lineChartCanvas, {
-              type: 'line',
-              data: dataMonthly,
-              options: options
-            });
           }
+          if (start == 0) {
+            var ctx = document.getElementById('chartJSContainer').getContext('2d');
+            chart = new Chart(ctx, options);
+          } else {
+            console.log(chart);
+            chart.options = options;
+            chart.update();
+          }
+
         },
         error: function(data, request, status, error) {}
       });
     }
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js"></script>
+
   <!-- End custom js for this page -->
 </body>
 
