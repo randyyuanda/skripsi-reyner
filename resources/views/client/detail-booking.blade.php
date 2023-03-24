@@ -228,8 +228,10 @@
                     <div style="display: inline-flex;" id="div-document-do">
                       <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[1]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
                       </a>
+                      @if ($book->status != 'Shipment Completed')
                       <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc()" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
                       </a>
+                      @endif
                     </div>
                     <div id="div-upload-do" style="display: none;">
                       <div class="mb-3">

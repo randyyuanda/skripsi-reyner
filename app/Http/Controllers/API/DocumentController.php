@@ -11,6 +11,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use PDO;
+use Illuminate\Support\Str;
 
 class DocumentController extends Controller
 {
@@ -26,6 +27,8 @@ class DocumentController extends Controller
             return $this->upload($request, $booking, 'Bill Of Lading');
         } else if ($document == 'COO') {
             return $this->upload($request, $booking, 'Certificate Of Origin');
+        } else if ($document == 'INV') {
+            return $this->upload($request, $booking, 'Invoice');
         } else {
             return response()->json(['error' => 'Error Upload Document'], 500);
         }

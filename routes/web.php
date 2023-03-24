@@ -34,6 +34,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/list-admin', [App\Http\Controllers\HomeController::class, 'listAdmin']);
     Route::get('/detail-klien/{klien_id}', [App\Http\Controllers\HomeController::class, 'detailKlienAdmin']);
     Route::get('/create-klien', [App\Http\Controllers\HomeController::class, 'createKlien']);
+    Route::get('/update-klien/{klien_id}', [App\Http\Controllers\HomeController::class, 'updateKlien']);
     Route::get('/create-admin', [App\Http\Controllers\HomeController::class, 'createAdmin']);
     Route::get('/all-book', [App\Http\Controllers\HomeController::class, 'allBook']);
     Route::get('/create-invoice/{booking_id}', [App\Http\Controllers\HomeController::class, 'createInvoice']);

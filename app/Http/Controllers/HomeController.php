@@ -119,6 +119,15 @@ class HomeController extends Controller
         ]);
     }
 
+    public function updateKlien($klien_id)
+    {
+        $klien = User::where('id', $klien_id)->first();
+        return view('/admin/update-klien', [
+            "title" => "home",
+            "klien" => $klien
+        ]);
+    }
+
     public function createAdmin()
     {
         return view('/admin/create-admin', [
@@ -128,7 +137,7 @@ class HomeController extends Controller
 
     public function allBook()
     {
-        $listbooking = Booking::get();
+        $listbooking = Booking::orderBy('date_shipment', 'desc')->get();
         foreach ($listbooking as $book) {
             $book->nama_klien = User::where('id', $book->users_id)->first()->name;
         }
@@ -140,7 +149,7 @@ class HomeController extends Controller
 
     public function listbooking()
     {
-        $listbook = Booking::where('users_id', Auth::user()->id)->get();
+        $listbook = Booking::where('users_id', Auth::user()->id)->orderBy('date_shipment', 'desc')->get();
         foreach ($listbook as $book) {
             $book->nama_klien = User::where('id', $book->users_id)->first()->name;
         }

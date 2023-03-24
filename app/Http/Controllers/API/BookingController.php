@@ -74,7 +74,7 @@ class BookingController extends Controller
   public function completeBooking(Request $request, $booking_id)
   {
     $book = Booking::where('booking_id', $booking_id)->first();
-    $book->status = $request->get('Shipment Completed');
+    $book->status = 'Shipment Completed';
     $book->save();
     return response()->json($book);
   }

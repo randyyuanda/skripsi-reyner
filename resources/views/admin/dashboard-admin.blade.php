@@ -150,6 +150,30 @@
         dataType: "json",
         success: function(data) {
           var options = {
+
+            // plugins: [{
+            //   id: 'customValue',
+            //   afterDraw: (chart, args, opts) => {
+            //     const {
+            //       ctx,
+            //       data: {
+            //         datasets
+            //       },
+            //       _metasets
+            //     } = chart;
+
+            //     datasets[0].data.forEach((dp, i) => {
+            //       let barValue = `${(datasets[1].data[i] + dp) / 2}%`;
+            //       const lineHeight = ctx.measureText('M').width;
+            //       const textVal = opts.name || 'fill'
+
+            //       ctx.textAlign = 'center';
+
+            //       ctx.fillText(barValue, _metasets[0].data[i].x, (_metasets[0].data[i].y - lineHeight * 1.5), _metasets[0].data[i].width);
+            //       ctx.fillText(textVal, _metasets[0].data[i].x, (_metasets[0].data[i].y - lineHeight * 3), _metasets[0].data[i].width);
+            //     });
+            //   }
+            // }],
             type: 'bar',
             data: {
               labels: ["January", "February", "March", "April", "May", "June",
@@ -167,12 +191,22 @@
                 }
               ]
             },
+            options: {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    min: 0,
+                    max: 20,
+                  }
+                }]
+              },
+            }
+
           }
           if (start == 0) {
             var ctx = document.getElementById('chartJSContainer').getContext('2d');
             chart = new Chart(ctx, options);
           } else {
-            console.log(chart);
             chart.options = options;
             chart.update();
           }
@@ -182,7 +216,8 @@
       });
     }
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
   <!-- End custom js for this page -->
 </body>
 

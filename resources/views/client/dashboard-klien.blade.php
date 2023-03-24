@@ -159,6 +159,16 @@
                 }
               ]
             },
+            options: {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    min: 0,
+                    max: 20,
+                  }
+                }]
+              },
+            }
           }
           if (start == 0) {
             var ctx = document.getElementById('chartJSContainer').getContext('2d');
@@ -174,8 +184,9 @@
       });
     }
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js"></script> -->
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
   <!-- End custom js for this page -->
 </body>
 

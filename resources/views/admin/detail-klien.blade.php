@@ -34,11 +34,16 @@
     <div class="main-panel">
       <div class="content-wrapper">
         <div class="page-header">
-          <h3 class="page-title">
+          <span class="page-title">
             <span class="page-title-icon bg-gradient-primary text-white me-2">
               <i class="mdi mdi-hospital-building"></i>
             </span> Klien Detail
-          </h3>
+            <a class="btn nav-link btn-gradient-primary ml-2" href="/update-klien/{{ $klien->id }}" style="width: 100px; display: inline-block;align-items: center; text-align: center;">
+              <i class="mdi mdi-circle-edit-outline menu-icon"> </i> Edit
+            </a>
+
+          </span>
+
           <nav aria-label="breadcrumb">
             <ul class="breadcrumb">
               <li class="breadcrumb-item active" aria-current="page">
@@ -117,7 +122,7 @@
             <tr>
               <th scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">1</th>
               <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->nama_klien }}</td>
-              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->date_shipment }}</td>
+              <td onclick=".replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->date_shipment }}</td>
               <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success' : (($book->status == 'Canceled') ? 'badge-danger' : 'badge-warning') }} ">{{ $book->status}}</label></td>
               <!-- <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge badge-warning">In Progress</label></td> -->
               <td><i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil"></i><i class="mdi mdi mdi-delete"></i></td>

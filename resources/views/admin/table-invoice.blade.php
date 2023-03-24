@@ -72,9 +72,9 @@
 </head>
 
 <body>
-    <!-- <div>
+    <div>
         <img src="/images/kop.jpeg" width="50%" height="auto">
-    </div> -->
+    </div>
     <div style="text-align: center;">
         </strong>
         <h1>INVOICE</h1></b>

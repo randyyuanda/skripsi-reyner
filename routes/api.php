@@ -28,4 +28,5 @@ Route::get('/monthly-shipment-klien/{users_id}/{year}', '\App\Http\Controllers\A
 Route::post('/upload-document/{booking_id}/{document}', '\App\Http\Controllers\API\DocumentController@uploadDocument');
 Route::put('/update-document/{document_id}', '\App\Http\Controllers\API\DocumentController@updateDocument');
 Route::put('/complete-booking/{booking_id}', '\App\Http\Controllers\API\BookingController@completeBooking');
+Route::put('/change-password/{klien_id}', '\App\Http\Controllers\API\UserController@changePassword');
 // Route::post('/generate-pdf', '\App\Http\Controllers\API\PDFController@generatePDF');
