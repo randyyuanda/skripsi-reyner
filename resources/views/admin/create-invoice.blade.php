@@ -200,25 +200,25 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="text" class="form-control" name="doc" placeholder="Detail of Charges">
+                                                        <input type="text" class="form-control" name="doc" id="doc1" placeholder="Detail of Charges">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number" min="0" class="form-control" name="qty" placeholder="Quantity">
+                                                        <input type="number" min="0" class="form-control" name="qty" id="qty1" placeholder="Quantity">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number"  min="0" step="100000" class="form-control" name="unitrate" placeholder="Unit Rate">
+                                                        <input type="number" min="0" step="100000" class="form-control" name="unitrate" id="unitrate1" placeholder="Unit Rate">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number"  min="0" step="100000" class="form-control" name="amount" placeholder="Total Amount">
+                                                        <input type="number" min="0" step="100000" class="form-control" name="amount" id="amount1" placeholder="Total Amount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -369,6 +369,7 @@
             var getCanvas; // global variable
             var newData;
 
+
             function createInvoice(image) {
                 var formData = new FormData();
                 formData.append('document', image);
@@ -391,13 +392,49 @@
                     },
                 });
             }
-            var count = 0;
+            var count = 1;
+
+            $('#unitrate1').keyup(function(event) {
+                var total_amount = $('#unitrate1').val() * $('#qty1').val();
+                $('#amount1').val(total_amount);
+            });
 
             $('.extra-fields-customer').click(function() {
-                $('.customer_records').clone().appendTo('.customer_records_dynamic');
-                $('.customer_records_dynamic .customer_records').addClass('single remove');
-                $('.single .extra-fields-customer').remove();
-                $('.customer_records_dynamic > .single').attr("class", "remove");
+                count += 1;
+                $('.customer_records_dynamic').append(`
+                <div class="customer_records">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputCity1"></label>
+                                                        <input type="text" class="form-control" name="doc" id="doc` + count + `" placeholder="Detail of Charges">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputCity1"></label>
+                                                        <input type="number" min="0" class="form-control" name="qty" id="qty` + count + `" placeholder="Quantity">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputCity1"></label>
+                                                        <input type="number"  min="0" step="100000" class="form-control" name="unitrate" id="unitrate` + count + `" placeholder="Unit Rate">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputCity1"></label>
+                                                        <input type="number"  min="0" step="100000" class="form-control" name="amount" id="amount` + count + `"  placeholder="Total Amount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                `);
+                $(`#unitrate${count}`).keyup(function(event) {
+                    var total_amount = $(`#unitrate${count}`).val() * $(`#qty${count}`).val();
+                    $(`#amount${count}`).val(total_amount);
+                });
             });
 
             var today = new Date();
@@ -494,7 +531,7 @@
                     window.frames["print_frame"].window.print();
                 }, 400);
             }
-            
+
 
             function currencyFormat(val) {
                 let parts = val.split(".");

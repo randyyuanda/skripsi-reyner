@@ -71,7 +71,20 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 style="font-size:28px; font-weight:bold;" class="card-title">My Bookings  |  {{ date('Y') }}</h4>
+                <h4 style="font-size:28px; font-weight:bold;" class="card-title">My Bookings | {{ date('Y') }}</h4>
+                <select class="form-control" onchange="changeYear(this.value)" style="color: black; border: 1px solid black;">
+                  <option>{{ date('Y') }}</option>
+                  <option>{{ date('Y') -1 }}</option>
+                  <option>{{ date('Y') -2 }}</option>
+                  <option>{{ date('Y') -3 }}</option>
+                  <option>{{ date('Y') -4}}</option>
+                  <option>{{ date('Y') -5}}</option>
+                  <option>{{ date('Y') -6}}</option>
+                  <option>{{ date('Y') -7}}</option>
+                  <option>{{ date('Y') -8}}</option>
+                  <option>{{ date('Y') -9}}</option>
+                  <option>{{ date('Y') -10}}</option>
+                </select>
                 <canvas id="chartJSContainer" width="600" height="250"></canvas>
 
                 <!-- <canvas id="barChart" style="height:250px"></canvas> -->
@@ -121,6 +134,10 @@
     var year = new Date().getFullYear();
     var start = 0;
     var chart = '';
+
+    function changeYear(e) {
+      getData(e);
+    }
 
     function getData(year = new Date().getFullYear()) {
       $.ajax({
