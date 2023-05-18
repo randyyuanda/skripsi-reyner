@@ -218,7 +218,7 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number" min="0" step="100000" class="form-control" name="amount" id="amount1" placeholder="Total Amount">
+                                                        <input type="number" min="0" step="100000" class="form-control" name="amount" id="amount1" placeholder="Total Amount" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -425,13 +425,14 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number"  min="0" step="100000" class="form-control" name="amount" id="amount` + count + `"  placeholder="Total Amount">
+                                                        <input type="number"  min="0" step="100000" class="form-control" name="amount" id="amount` + count + `"  placeholder="Total Amount" disabled>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                 `);
-                $(`#unitrate${count}`).keyup(function(event) {
+                // $(":input").bind('keyup change', function (event) {
+                $(`#unitrate${count}`).bind('keyup change click', function(event) {
                     var total_amount = $(`#unitrate${count}`).val() * $(`#qty${count}`).val();
                     $(`#amount${count}`).val(total_amount);
                 });
