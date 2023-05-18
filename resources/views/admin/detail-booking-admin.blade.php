@@ -90,9 +90,9 @@
                 <button class="btn nav-link btn-gradient-primary ml-3" onclick="$('#ModalPrint').modal('show')" style="color: white;margin-left: calc(var(--bs-gutter-x) * .5);display: inline-flex; height: 36px; align-items: center; text-align: center; width: 100px"><i class="mdi mdi-printer menu-icon mr-2"> </i>Print
                 </button>
                 <div style="float: right;">
-                  <span class="text-success" onclick="selectStatus('Approved')" style="cursor: pointer;"> {{ $book->status == 'PENDING APPROVEMENT' ? 'Approved' : '' }}</span>
-                  <span class="text-success"> {{ $book->status == 'PENDING APPROVEMENT' ? ' / ' : '' }}</span>
-                  <span class="text-danger" onclick="selectStatus('Canceled')" style="cursor: pointer;"> {{ $book->status == 'PENDING APPROVEMENT' ? 'Canceled' : '' }}</span>
+                  <span class="text-success" onclick="selectStatus('Approved')" style="cursor: pointer;"> {{ $book->status == 'Waiting' ? 'Approved' : '' }}</span>
+                  <span class="text-success"> {{ $book->status == 'Waiting' ? ' / ' : '' }}</span>
+                  <span class="text-danger" onclick="selectStatus('Canceled')" style="cursor: pointer;"> {{ $book->status == 'Waiting' ? 'Canceled' : '' }}</span>
                 </div>
               </h4><br>
               <div>
@@ -254,7 +254,7 @@
           <div class="card">
             <div class="card-body {{ $book->document->count() < 2 ? 'tahap-failed' : 'tahap-success'}}">
               <strong>
-                <h4 class="card-title {{ $book->document->count() < 1 ? 'text-tahap-failed' : 'text-tahap-success'}}" style="font-weight: bold;">Tahap Kedua</h4>
+                <h4 class="card-title {{ $book->document->count() < 2 ? 'text-tahap-failed' : 'text-tahap-success'}}" style="font-weight: bold;">Tahap Kedua</h4>
               </strong>
               <div class="card {{ $book->document->count() < 2 ? 'card-failed' : ''}}">
                 <div class="card-body" style="padding: 1rem">
@@ -263,7 +263,10 @@
                     @if ($book->document->count() > 1 )
                     <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[1]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
                     </a>
+
                     @endif
+                    @if ($book->document->count() < 2 ) <span style="color: rgba(146, 146, 146, 1)">IPL belum tersedia, pihak klien belum mengunggah dokumen IPL</span>
+                      @endif
                   </div>
                 </div>
               </div>
@@ -291,7 +294,10 @@
                       </div>
                       <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[2]->document_id }}')">Submit</button>
                     </div>
+
                     @endif
+                    @if ($book->document->count() < 2 ) <span style="color: rgba(146, 146, 146, 1)">PEB belum tersedia, pihak Anugrah Sempurna Trans belum mengunggah dokumen PEB</span>
+                      @endif
                     @if ($book->document->count() == 2 )
                     <div>
                       <div class="mb-3">
@@ -309,58 +315,8 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-        <!-- Invoice Packing List -->
-        <!-- <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Invoice Packing List</h4>
-              @if ($book->document->count() > 1 )
-              <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[1]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-              </a>
-              @endif
-            </div>
-          </div>
-        </div> -->
-        <!-- PEB -->
-        <!-- <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">PEB (Pemberitahuan Ekspor Barang)</h4>
-              @if ($book->document->count() > 2 )
-              <div style="display: inline-flex;" id="div-document-peb">
-
-                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[2]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-                </a>
-                <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-peb','div-upload-peb')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
-                </a>
-              </div>
-              <div id="div-upload-peb" style="display: none;">
-                <div class="mb-3">
-                  <div class="file-drop-area form-control ">
-                    <span class="fake-btn">Choose files</span>
-                    <span class="file-msg">or drag and drop files here</span>
-                    <input class="file-input" type="file">
-                  </div>
-                </div>
-                <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[2]->document_id }}')">Submit</button>
-              </div>
-              @endif
-              @if ($book->document->count() == 2 )
-              <div class="mb-3">
-                <div class="file-drop-area form-control ">
-                  <span class="fake-btn">Choose files</span>
-                  <span class="file-msg">or drag and drop files here</span>
-                  <input class="file-input" type="file">
-                </div>
-              </div>
-              <button class="btn btn-gradient-primary" onclick="uploadDocument('PEB','{{ $book->booking_id }}')">Submit</button>
-              @endif
-            </div>
-          </div>
-        </div> -->
         <div class="col-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body {{ $book->document->count() < 3 ? 'tahap-failed' : 'tahap-success'}}">
@@ -391,7 +347,10 @@
                       </div>
                       <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[3]->document_id }}')">Submit</button>
                     </div>
+
                     @endif
+                    @if ($book->document->count() < 3 ) <span style="color: rgba(146, 146, 146, 1)">BL belum tersedia, pihak Anugrah Sempurna Trans belum mengunggah dokumen BL</span>
+                      @endif
                     @if ($book->document->count() == 3 )
                     <div class="mb-3">
                       <div class="file-drop-area form-control ">
@@ -400,7 +359,9 @@
                         <input class="file-input" type="file">
                       </div>
                     </div>
-                    <button class="btn btn-gradient-primary" onclick="uploadDocument('BL','{{ $book->booking_id }}')">Submit</button>
+                    <div>
+                      <button class="btn btn-gradient-primary" onclick="uploadDocument('BL','{{ $book->booking_id }}')">Submit</button>
+                    </div>
                     @endif
                   </div>
                 </div>
@@ -429,7 +390,10 @@
                       </div>
                       <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[4]->document_id }}')">Submit</button>
                     </div>
+
                     @endif
+                    @if ($book->document->count() < 4 ) <span style="color: rgba(146, 146, 146, 1)">COO belum tersedia, pihak Anugrah Sempurna Trans belum mengunggah dokumen COO</span>
+                      @endif
                     @if ($book->document->count() == 4 )
                     <div class="mb-3">
                       <div class="file-drop-area form-control ">
@@ -438,8 +402,9 @@
                         <input class="file-input" type="file">
                       </div>
                     </div>
-                    <button class="btn btn-gradient-primary" onclick="uploadDocument('COO','{{ $book->booking_id }}')">Submit</button>
-
+                    <div>
+                      <button class="btn btn-gradient-primary" onclick="uploadDocument('COO','{{ $book->booking_id }}')">Submit</button>
+                    </div>
                     @endif
                   </div>
                 </div>
@@ -452,7 +417,7 @@
                     <div style="display: inline-flex;" id="div-document-inv">
                       <a class="btn btn-gradient-primary" href='/create-invoice/{{ $book->booking_id }}' style="padding-left: 1rem;display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Create Invoice</a>
 
-                      <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-inv','div-upload-inv')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Upload
+                      <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-inv','div-upload-inv')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-upload menu-icon mr-2"> </i>Upload
                       </a>
                     </div>
                     <div id="div-upload-inv" style="display: none;">
@@ -463,9 +428,14 @@
                           <input class="file-input" type="file">
                         </div>
                       </div>
-                      <button class="btn btn-gradient-primary" onclick="uploadDocument('INV','{{ $book->booking_id }}')">Submit</button>
+                      <div>
+                        <button class="btn btn-gradient-primary" onclick="uploadDocument('INV','{{ $book->booking_id }}')">Submit</button>
+                      </div>
                     </div>
+
                     @endif
+                    @if ($book->document->count() < 5 ) <span style="color: rgba(146, 146, 146, 1)">Invoice belum tersedia, pihak Anugrah Sempurna Trans belum mengunggah dokumen Invoice</span>
+                      @endif
                     @if ($book->document->count() > 5 )
                     <div style="display: inline-flex; padding-left: 0px" id="div-document-inv">
 
@@ -502,92 +472,6 @@
           <a type="button" class="btn text-white btn-secondary disabled" style="width: 100%"> ✓ Shipment Completed</a>
           @endif
         </div>
-        <!-- BL -->
-        <!-- <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">BL (Bill Of Lading)</h4>
-              @if ($book->document->count() > 3 )
-              <div style="display: inline-flex;" id="div-document-bl">
-
-                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[3]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-                </a>
-                <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-bl','div-upload-bl')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
-                </a>
-              </div>
-              <div id="div-upload-bl" style="display: none;">
-                <div class="mb-3">
-                  <div class="file-drop-area form-control ">
-                    <span class="fake-btn">Choose files</span>
-                    <span class="file-msg">or drag and drop files here</span>
-                    <input class="file-input" type="file">
-                  </div>
-                </div>
-                <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[3]->document_id }}')">Submit</button>
-              </div>
-              @endif
-              @if ($book->document->count() == 3 )
-              <div class="mb-3">
-                <div class="file-drop-area form-control ">
-                  <span class="fake-btn">Choose files</span>
-                  <span class="file-msg">or drag and drop files here</span>
-                  <input class="file-input" type="file">
-                </div>
-              </div>
-              <button class="btn btn-gradient-primary" onclick="uploadDocument('BL','{{ $book->booking_id }}')">Submit</button>
-              @endif
-            </div>
-          </div>
-        </div> -->
-        <!-- COO -->
-        <!-- <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">COO (Certificate Of Origin)</h4>
-              @if ($book->document->count() > 4 )
-              <div style="display: inline-flex;" id="div-document-coo">
-
-                <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[4]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
-                </a>
-                <a class="btn nav-link btn-gradient-primary ml-2 text-white" onclick="updateDoc('div-document-coo','div-upload-coo')" style="display: flex; height: 36px; align-items: center; text-align: center;"><i class="mdi mdi-reload menu-icon mr-2"> </i>Change
-                </a>
-              </div>
-              <div id="div-upload-coo" style="display: none;">
-                <div class="mb-3">
-                  <div class="file-drop-area form-control ">
-                    <span class="fake-btn">Choose files</span>
-                    <span class="file-msg">or drag and drop files here</span>
-                    <input class="file-input" type="file">
-                  </div>
-                </div>
-                <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[4]->document_id }}')">Submit</button>
-              </div>
-              @endif
-              @if ($book->document->count() == 4 )
-              <div class="mb-3">
-                <div class="file-drop-area form-control ">
-                  <span class="fake-btn">Choose files</span>
-                  <span class="file-msg">or drag and drop files here</span>
-                  <input class="file-input" type="file">
-                </div>
-              </div>
-              <button class="btn btn-gradient-primary" onclick="uploadDocument('COO','{{ $book->booking_id }}')">Submit</button>
-
-              @endif
-            </div>
-          </div>
-        </div> -->
-        <!-- Invoice -->
-        <!-- <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Issued Invoice</h4>
-              @if ($book->document->count() == 5 )
-              <a class="btn btn-gradient-primary" href='/create-invoice/{{ $book->booking_id }}'>Invoice</a>
-              @endif
-            </div>
-          </div>
-        </div> -->
       </div>
       <!-- content-wrapper ends -->
     </div>
@@ -634,54 +518,54 @@
               </div>
             </div>
             <div class="row mb-1 text-center" style="margin-top: 15px">
-              <div class="col">
+              <div style="font-weight:bold" class="col">
                 SHIPPING INSTRUCTION
 
               </div>
             </div>
-            <div class="row mb-1 text-left" style="margin-top: 15px">
+            <div class="row mb-1 text-left" style="margin-top: 15px; line-height: 0.1px;">
               <div class="col-12">
                 <span style="margin-right: 167px">1. Reference No. </span> :
-                <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{ \Carbon\Carbon::parse($book->date_shipment)->format('Y-d') }}</p>
+                <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{ \Carbon\Carbon::parse($book->date_shipment)->format('Y') }} - {{$book->booking_id}} </p>
               </div>
             </div>
-            <div class="row mb-1 text-left">
+            <div class="row mb-1 text-left" style="line-height: 0.1px">
               <div class="col-12">
                 <span style="margin-right: 150px">2. Pelabuhan Muat. </span> :
                 <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{$book->pelabuhan_muat}}</p>
               </div>
             </div>
-            <div class="row mb-1 text-left">
+            <div class="row mb-1 text-left" style="line-height: 0.1px">
               <div class="col-12">
                 <span style="margin-right: 138px">3. Pelabuhan Tujuan. </span> :
                 <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{$book->pelabuhan_tujuan}}</p>
               </div>
             </div>
-            <div class="row mb-1 text-left">
+            <div class="row mb-1 text-left" style="line-height: 0.1px">
               <div class="col-12">
                 <span style="margin-right: 148px">4. Final Destination. </span> :
                 <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{$book->final_destination}}</p>
               </div>
             </div>
-            <div class="row mb-1 text-left">
+            <div class="row mb-1 text-left" style="line-height: 0.1px">
               <div class="col-12">
                 <span style="margin-right: 173px">5. Vessel Name. </span> :
                 <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{$book->vessel_name}}</p>
               </div>
             </div>
-            <div class="row mb-1 text-left">
+            <div class="row mb-1 text-left" style="line-height: 0.1px">
               <div class="col-12">
                 <span style="margin-right: 144px">6. Date of Shipment. </span> :
                 <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{ \Carbon\Carbon::parse($book->date_shipment)->format('M d, Y') }}</p>
               </div>
             </div>
-            <div class="row mb-1 text-left">
+            <div class="row mb-1 text-left" style="margin-bottom: 25px; line-height: 0.1px;">
               <div class="col-12">
                 <span style="margin-right: 176px">7. Container no. </span> :
                 <p class="mb-0 lh-1" style="white-space: pre-line;display: inline-flex;">{{ $book->container_no }}</p>
               </div>
             </div>
-            <div class="mt-4 mb-1 text-left">
+            <div style="font-weight:bold" class="mt-4 mb-1 text-left">
               Data yang diisi dalam Bill of Lading :
             </div>
             <div class="row mb-1 text-left">

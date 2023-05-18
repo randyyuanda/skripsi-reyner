@@ -19,6 +19,41 @@
   <link rel="stylesheet" href="/css/app.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="/images/favicon.ico" />
+  <style>
+    .badge-warning-custom {
+      background: #F9FAC5;
+      color: #C3B000;
+    }
+
+    .badge-danger-custom {
+      background: #FAEBE6;
+      color: #B44100;
+    }
+
+    .badge-success-custom {
+      background: #EEFAE6;
+      color: #19B400;
+    }
+
+    .badge-waiting-custom {
+      background: #E6EEFA;
+      color: #0028B4;
+    }
+
+    .badge-approved-custom {
+      background: #F7E6FA;
+      color: #9000B4;
+    }
+
+    .badge-completed-custom {
+      background: rgba(238, 250, 230, 1);
+      color: rgba(25, 180, 0, 1);
+    }
+
+    .table tr {
+    cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -72,7 +107,7 @@
                   </div>
                   <div class="col">
                     <div>
-                      <label style="color: rgb(133, 133, 133)">Total Shipment (Monthly)</label>
+                      <label style="color: rgb(133, 133, 133)">Total Shipment ({{ date('M') }})</label>
                       <p>{{ $counttotalmonthlyshipment }}</p>
                     </div>
                   </div>
@@ -94,23 +129,41 @@
             </span> Shipment Klien
           </h3>
           <nav aria-label="breadcrumb row">
-            <!-- <div class="dropdown">
-              <button class="btn btn-gradient-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown button
-              </button>
-              <ul class="dropdown-menu btn-gradient-primary" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item active" href="#">Action</a></li>
-                <li><a class="dropdown-item " href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </div> -->
+            <div class="col input-group">
+                <form autocomplete="off" action="" class="input-group">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="Filter Status" name="search" type="text" list="statusname">
+                      <span class="input-group-append bg-white border-left-0">
+                        <span class="input-group-text bg-transparent">
+                          <i class="mdi mdi-filter"></i>
+                        </span>
+                      </span>
+                      <datalist id="statusname">
+                        <option value="Waiting">
+                        <option value="Approved">
+                        <option value="Canceled">
+                        <option value="Delivery Order Received">
+                        <option value="Invoice Packing List Received">
+                        <option value="Pemberitahuan Ekspor Barang Received">
+                        <option value="Bill Of Lading Received">
+                        <option value="Certificate Of Origin Received">
+                        <option value="Invoice Received">
+                        <option value="Shipment Completed">
+                      </datalist>
+                  </div>
+                </form>
+              </div>
           </nav>
+          <div class="col">
+            <button onclick="window.location.replace('/detail-klien/{{ $klien->id }}')"  class="btn btn-primary" type="button">Reset</button>
+          </div>
         </div>
         <table class="table table-light table-hover">
           <thead>
             <tr class="table-dark">
               <th style="background-color:rgb(218, 21, 90)" scope="col">No</th>
-              <th style="background-color:rgb(218, 21, 90)" scope="col">Nama klien</th>
+              <th style="background-color:rgb(218, 21, 90)" scope="col">Tujuan</th>
+              <th style="background-color:rgb(218, 21, 90)" scope="col">Booking Created On</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Date Shipment</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Status</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Action</th>
@@ -120,12 +173,18 @@
             @if (count($listbooking) > 0)
             @foreach ($listbooking as $book)
             <tr>
-              <th scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">1</th>
-              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->nama_klien }}</td>
-              <td onclick=".replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->date_shipment }}</td>
-              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success' : (($book->status == 'Canceled') ? 'badge-danger' : 'badge-warning') }} ">{{ $book->status}}</label></td>
-              <!-- <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge badge-warning">In Progress</label></td> -->
-              <td><i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil"></i><i class="mdi mdi mdi-delete"></i></td>
+              <th scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id }}')">{{ $loop->index + 1 }}</th>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id }}')">{{ $book->pelabuhan_muat }} - {{ $book->pelabuhan_tujuan }}</td>
+              <td onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')">{{ $book->created_at->toDateString() }}</td>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id }}')">{{ $book->date_shipment }}</td>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success-custom' : (($book->status == 'Canceled') ? 'badge-danger-custom' : (($book->status == 'Waiting') ? 'badge-waiting-custom' : (($book->status == 'Approved') ? 'badge-approved-custom' : (($book->status == 'Shipment Completed') ? 'badge-completed-custom' : 'badge-warning-custom')))) }} ">{{ $book->status}}</label></td>
+              <td>
+                @if ($book->status == 'Waiting')
+                <i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil" onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')"></i>
+                <i class="mdi mdi mdi-delete" onclick="selectBook('booking', '{{ $book->booking_id}}' )"></i>
+                @endif
+              </td>
+
             </tr>
             @endforeach
             @else
@@ -135,6 +194,10 @@
             @endif
           </tbody>
         </table>
+        <div style="padding-top: 20px;float : right">
+            {{ $listbooking->links('pagination::bootstrap-5')}}
+          </nav>
+        </div>
       </div>
       <!-- content-wrapper ends -->
     </div>

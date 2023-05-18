@@ -19,6 +19,16 @@
   <link rel="stylesheet" href="/css/app.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="/images/favicon.ico" />
+
+  <style>
+    .table tr {
+    cursor: pointer;
+    }
+
+    .pr-0 {
+    padding-right: 0 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -43,12 +53,31 @@
             <a class="btn nav-link btn-block btn-gradient-primary" href="/create-klien" style="display: flex; height: 36px; align-items: center; text-align: center;">+ New Klien</a>
           </nav>
         </div>
+        <div style="float : right; padding-right : 0px" class="col-4 container mb-3">
+          <div class="row">
+            <div class="col input-group">
+              <form autocomplete="off" action="" class="input-group">
+                <div class="input-group">
+                  <input type="text" name="search" class="form-control" placeholder="Search name">
+                  <span class="input-group-append bg-white border-left-0">
+                    <span class="input-group-text bg-transparent">
+                      <i class="mdi mdi-magnify"></i>
+                    </span>
+                  </span>
+                </div>
+              </form>
+            </div>
+            <div class="input-group-append">
+              <button onclick="window.location.replace('/list-klien/')"  class="btn btn-primary" type="button">Reset</button>
+            </div>
+          </div>
+        </div>
         <table class="table table-light table-hover">
           <thead>
             <tr class="table-dark">
               <th style="background-color:rgb(218, 21, 90)" scope="col">No</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Nama Klien</th>
-              <th style="background-color:rgb(218, 21, 90)" scope="col">Total Shipment(Monthly)</th>
+              <th style="background-color:rgb(218, 21, 90)" scope="col">Total Shipment ({{ date('M') }})</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Action</th>
             </tr>
           </thead>
@@ -59,7 +88,7 @@
               <th scope="row" onclick="window.location.replace('/detail-klien/{{ $klien->id }}')">{{ $loop->index + 1 }}</th>
               <td onclick="window.location.replace('/detail-klien/{{ $klien->id }}')">{{ $klien->name }}</td>
               <td onclick="window.location.replace('/detail-klien/{{ $klien->id }}')">{{ $klien->total_shipment  }}</td>
-              <td><i style="margin-right: 5px" class="mdi mdi-grease-pencil" onclick="window.location.replace('/detail-klien/{{ $klien->id }}')"></i><i class="mdi mdi-delete" onclick="selectKlien('{{ $klien->name }}','{{ $klien->id }}')"></i></td>
+              <td><i style="margin-right: 5px" class="mdi mdi-grease-pencil" onclick="window.location.replace('/update-klien/{{ $klien->id }}')"></i><i class="mdi mdi-delete" onclick="selectKlien('{{ $klien->name }}','{{ $klien->id }}')"></i></td>
             </tr>
             @endforeach
             @else

@@ -67,7 +67,7 @@
             </div>
           </div>
           <div class="col-md-4 stretch-card grid-margin" style="height: 150px;">
-            <div class="card bg-gradient-danger card-img-holder text-white">
+            <div class="card bg-gradient-cancel card-img-holder text-white">
               <div class="card-body">
                 <img src="/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                 <h4 class="font-weight-normal mb-3">Canceled Shipment<i class="mdi mdi-chart-line mdi-24px float-right"></i>
@@ -81,17 +81,7 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Monthly Shipment</h4>
-                <div id="info">
-                  <select class="form-select" id="mySelect" onchange="myFunction()">
-                    <option>Select Year</option>
-                    <?php
-                    $years = range(2000, strftime("%Y", time() + 20));
-                    foreach ($years as $year) : ?>
-                      <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
+                <h4 style="font-size:28px; font-weight:bold;" class="card-title">Monthly Shipment  |  {{ date('Y') }}</h4>
                 <canvas id="chartJSContainer" width="600" height="250"></canvas>
               </div>
             </div>
@@ -151,29 +141,6 @@
         success: function(data) {
           var options = {
 
-            // plugins: [{
-            //   id: 'customValue',
-            //   afterDraw: (chart, args, opts) => {
-            //     const {
-            //       ctx,
-            //       data: {
-            //         datasets
-            //       },
-            //       _metasets
-            //     } = chart;
-
-            //     datasets[0].data.forEach((dp, i) => {
-            //       let barValue = `${(datasets[1].data[i] + dp) / 2}%`;
-            //       const lineHeight = ctx.measureText('M').width;
-            //       const textVal = opts.name || 'fill'
-
-            //       ctx.textAlign = 'center';
-
-            //       ctx.fillText(barValue, _metasets[0].data[i].x, (_metasets[0].data[i].y - lineHeight * 1.5), _metasets[0].data[i].width);
-            //       ctx.fillText(textVal, _metasets[0].data[i].x, (_metasets[0].data[i].y - lineHeight * 3), _metasets[0].data[i].width);
-            //     });
-            //   }
-            // }],
             type: 'bar',
             data: {
               labels: ["January", "February", "March", "April", "May", "June",
@@ -182,12 +149,17 @@
               datasets: [{
                   label: 'On Going',
                   data: data[0],
-                  backgroundColor: 'red'
+                  backgroundColor: '#ffbf96'
                 },
                 {
                   label: 'Completed',
                   data: data[1],
-                  backgroundColor: 'blue'
+                  backgroundColor: '#198ae3'
+                },
+                {
+                  label: 'Canceled',
+                  data: data[2],
+                  backgroundColor: '#ff2424'
                 }
               ]
             },

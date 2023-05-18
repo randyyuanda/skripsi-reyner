@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="/css/app.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="/images/favicon.ico" />
+
 </head>
 
 <body>
@@ -58,7 +59,7 @@
             <tr>
               <th scope="row">{{ $loop->index + 1 }}</th>
               <td>{{ $admin->name }}</td>
-              <td><i style="margin-right: 5px" class="mdi mdi-grease-pencil"></i><i class="mdi mdi-delete" onclick="selectAdmin('{{ $admin->name }}','{{ $admin->id }}');"></i></td>
+              <td style="cursor: pointer" ><i style="margin-right: 5px" class="mdi mdi-grease-pencil" onclick="window.location.replace('/update-admin/{{ $admin->id }}')"></i><i class="mdi mdi-delete" onclick="selectAdmin('{{ $admin->name }}','{{ $admin->id }}');"></i></td>
             </tr>
             @endforeach
             @else

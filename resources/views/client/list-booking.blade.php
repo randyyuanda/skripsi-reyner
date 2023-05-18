@@ -44,6 +44,15 @@
       background: #F7E6FA;
       color: #9000B4;
     }
+
+    .badge-completed-custom {
+      background: rgba(238, 250, 230, 1);
+      color: rgba(25, 180, 0, 1);
+    }
+
+    .table tr {
+    cursor: pointer;
+    }
   </style>
 </head>
 
@@ -71,11 +80,43 @@
             </ul>
           </nav>
         </div>
+        <div style="float : right; padding-right : 0px" class="col-3 container mb-3">
+          <div class="row">
+            <div class="col input-group">
+              <form autocomplete="off" action="" class="input-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="Filter Status" name="search" type="text" list="statusname">
+                    <span class="input-group-append bg-white border-left-0">
+                      <span class="input-group-text bg-transparent">
+                        <i class="mdi mdi-filter"></i>
+                      </span>
+                    </span>
+                    <datalist id="statusname">
+                      <option value="Waiting">
+                      <option value="Approved">
+                      <option value="Canceled">
+                      <option value="Delivery Order Received">
+                      <option value="Invoice Packing List Received">
+                      <option value="Pemberitahuan Ekspor Barang Received">
+                      <option value="Bill Of Lading Received">
+                      <option value="Certificate Of Origin Received">
+                      <option value="Invoice Received">
+                      <option value="Shipment Completed">
+                    </datalist>
+                </div>
+              </form>
+            </div>
+            <div class="input-group-append">
+              <button onclick="window.location.replace('/list-booking/')"  class="btn btn-primary" type="button">Reset</button>
+            </div>
+          </div>
+        </div>
         <table class="table table-light table-hover">
           <thead>
             <tr class="table-dark">
               <th style="background-color:rgb(218, 21, 90)" scope="col">No</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Tujuan</th>
+              <th style="background-color:rgb(218, 21, 90)" scope="col">Booking Created On</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Date Shipment</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Status</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Action</th>
@@ -87,8 +128,9 @@
             <tr>
               <th scope="row" onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')">{{ $loop->index + 1 }}</th>
               <td onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')">{{ $book->pelabuhan_muat }} - {{ $book->pelabuhan_tujuan }}</td>
+              <td onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')">{{ $book->created_at->toDateString() }}</td>
               <td onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')">{{ $book->date_shipment }}</td>
-              <td onclick="window.location.replace('/detail-booking/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success-custom' : (($book->status == 'Canceled') ? 'badge-danger-custom' : (($book->status == 'Waiting') ? 'badge-waiting-custom' : (($book->status == 'Approved') ? 'badge-approved-custom' : 'badge-warning-custom'))) }} ">{{ $book->status}}</label></td>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success-custom' : (($book->status == 'Canceled') ? 'badge-danger-custom' : (($book->status == 'Waiting') ? 'badge-waiting-custom' : (($book->status == 'Approved') ? 'badge-approved-custom' : (($book->status == 'Shipment Completed') ? 'badge-completed-custom' : 'badge-warning-custom')))) }} ">{{ $book->status}}</label></td>
               <td>
                 @if ($book->status == 'Waiting')
                 <i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil" onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')"></i>
@@ -105,6 +147,9 @@
             @endif
           </tbody>
         </table>
+        <div style="padding-top: 20px;float : right">
+          {{ $listbook->links('pagination::bootstrap-5')}}
+      </div>
       </div>
       <!-- content-wrapper ends -->
     </div>

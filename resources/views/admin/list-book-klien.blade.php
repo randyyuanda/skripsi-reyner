@@ -44,6 +44,25 @@
       background: #F7E6FA;
       color: #9000B4;
     }
+
+    .badge-completed-custom {
+      background: rgba(238, 250, 230, 1);
+      color: rgba(25, 180, 0, 1);
+    }
+    
+    .table tr {
+    cursor: pointer;
+    }
+    
+    #optiondis{
+      color : #D9D9D9;
+    }
+
+    #optionvar{
+      color : #000000;
+    }
+
+
   </style>
 </head>
 
@@ -66,11 +85,55 @@
             </span> All Bookings
           </h3>
         </div>
+        <div style="float : right; padding-right : 0px" class="container mb-3">
+          <div class="row">
+            <div class="col input-group">
+              <form autocomplete="off" action="" class="input-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="Filter Status" name="search" type="text" list="statusname">
+                    <span class="input-group-append bg-white border-left-0">
+                      <span class="input-group-text bg-transparent">
+                        <i class="mdi mdi-filter"></i>
+                      </span>
+                    </span>
+                    <datalist id="statusname">
+                      <option value="Waiting">
+                      <option value="Approved">
+                      <option value="Canceled">
+                      <option value="Delivery Order Received">
+                      <option value="Invoice Packing List Received">
+                      <option value="Pemberitahuan Ekspor Barang Received">
+                      <option value="Bill Of Lading Received">
+                      <option value="Certificate Of Origin Received">
+                      <option value="Invoice Received">
+                      <option value="Shipment Completed">
+                    </datalist>
+                </div>
+              </form>
+            </div>
+            <div class="col input-group">
+              <form autocomplete="off" action="" class="input-group">
+                <div class="input-group">
+                  <input type="text" name="search" class="form-control" placeholder="Search name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                  <span class="input-group-append bg-white border-left-0">
+                    <span class="input-group-text bg-transparent">
+                      <i class="mdi mdi-magnify"></i>
+                    </span>
+                  </span>
+                </div>
+              </form>
+            </div>
+            <div class="input-group-append">
+              <button onclick="window.location.replace('/all-book/')"  class="btn btn-primary" type="button">Reset</button>
+            </div>
+          </div>
+        </div>
         <table class="table table-light table-hover">
           <thead>
             <tr class="table-dark">
               <th style="background-color:rgb(218, 21, 90)" scope="col">No</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Nama Klien</th>
+              <th style="background-color:rgb(218, 21, 90)" scope="col">Booking Received On</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Date Shipment</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Status</th>
               <th style="background-color:rgb(218, 21, 90)" scope="col">Action</th>
@@ -80,10 +143,11 @@
             @if (count($listbooking) > 0)
             @foreach ($listbooking as $book)
             <tr>
-              <th scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">1</th>
+              <th scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $loop->index + 1 }}</th>
               <td scope="row" onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->nama_klien }}</td>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->created_at->toDateString() }}</td>
               <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')">{{ $book->date_shipment }}</td>
-              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success-custom' : (($book->status == 'Canceled') ? 'badge-danger-custom' : (($book->status == 'Waiting') ? 'badge-waiting-custom' : (($book->status == 'Approved') ? 'badge-approved-custom' : 'badge-warning-custom'))) }} ">{{ $book->status}}</label></td>
+              <td onclick="window.location.replace('/detail-booking-admin/{{ $book->booking_id}}')"><label class="badge {{ ($book->status == 'Done') ? 'badge-success-custom' : (($book->status == 'Canceled') ? 'badge-danger-custom' : (($book->status == 'Waiting') ? 'badge-waiting-custom' : (($book->status == 'Approved') ? 'badge-approved-custom' : (($book->status == 'Shipment Completed') ? 'badge-completed-custom' : 'badge-warning-custom')))) }} ">{{ $book->status}}</label></td>
               <td>
                 @if ($book->status == 'Waiting')
                 <i style="margin-right: 5px" class="mdi mdi mdi-grease-pencil" onclick="window.location.replace('/detail-booking/{{ $book->booking_id }}')"></i>
@@ -100,6 +164,10 @@
             @endif
           </tbody>
         </table>
+        <div style="padding-top: 20px;float : right">
+            {{ $listbooking->links('pagination::bootstrap-5')}}
+          </nav>
+        </div>
       </div>
       <!-- content-wrapper ends -->
     </div>
@@ -142,6 +210,8 @@
   <!-- Custom js for this page -->
   <script src="/js/dashboard.js"></script>
   <script src="/js/todolist.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
   <script>
     var idbook = 0;
 

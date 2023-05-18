@@ -28,8 +28,14 @@ class Booking extends Model
         'total_measurement',
         'users_id',
     ];
+
     public function document()
     {
         return $this->hasMany('App\Models\Document', 'booking_id', 'booking_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'users_id');
     }
 }

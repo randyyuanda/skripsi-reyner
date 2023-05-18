@@ -244,7 +244,7 @@
                       <button class="btn btn-gradient-primary" onclick="updateDocument('{{ $book->document[1]->document_id }}')">Submit</button>
                     </div>
                     @endif
-                    @if ($book->document->count() < 1 ) <span style="color: rgba(146, 146, 146, 1)">IPL belum tersedia, pihak Anugrah Sempurna Trans belum mengunggah dokumen IPL</span>
+                    @if ($book->document->count() < 1 ) <span style="color: rgba(146, 146, 146, 1)">IPL belum tersedia, pihak klien belum mengunggah dokumen IPL</span>
                       @endif
                       @if ($book->document->count() == 1 && $book->status == 'Delivery Order Received' ) <div class="mb-3">
                         <div class="file-drop-area form-control ">
@@ -283,7 +283,7 @@
             <div class="card-body {{ $book->document->count() < 4 ? 'tahap-failed' : 'tahap-success'}}">
               <strong>
                 <h4 class="card-title {{ $book->document->count() < 4 ? 'text-tahap-failed' : 'text-tahap-success'}}" style="font-weight: bold;">Tahap Ketiga
-                  @if ($book->document->count() < 4 ) (Selesaikan tahap kedua untuk lanjut ke tahap ketiga) @endif </h4>
+                  @if ($book->document->count() < 4 ) <span>(Selesaikan tahap kedua untuk lanjut ke tahap ketiga)</span> @endif </h4>
 
               </strong>
               <div class="card {{ $book->document->count() < 4 ? 'card-failed' : '' }}">
@@ -318,7 +318,7 @@
                   <h4 class="card-title">Issued Invoice</h4>
                   <div>
                     @if ($book->document->count() > 5 )
-                    <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[4]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
+                    <a class="btn nav-link btn-gradient-primary" href="{{ url(Storage::url($book->document[5]->directory))  }}" target="_blank" style="margin-left: calc(var(--bs-gutter-x) * .5);display: flex; height: 36px; align-items: center; text-align: center; width: 150px"><i class="mdi mdi-file-document menu-icon mr-2"> </i>Preview PDF
                     </a>
                     @else
                     <span style="color: rgba(146, 146, 146, 1)">Issued Invoice belum tersedia, pihak Anugrah Sempurna Trans belum mengunggah dokumen Issued Invoice </span>

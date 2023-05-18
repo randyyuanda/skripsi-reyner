@@ -186,10 +186,10 @@
                                             Quantity
                                         </div>
                                         <div style="padding-left: 90px;" class="col">
-                                            Unit Rate
+                                            Unit Rate (IDR)
                                         </div>
                                         <div style="padding-left: 73px;" class="col">
-                                            Total Amount
+                                            Total Amount (IDR)
                                         </div>
                                     </div>
                                 </div>
@@ -206,19 +206,19 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number" class="form-control" name="qty" placeholder="Quantity">
+                                                        <input type="number" min="0" class="form-control" name="qty" placeholder="Quantity">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number" class="form-control" name="unitrate" placeholder="Unit Rate">
+                                                        <input type="number"  min="0" step="100000" class="form-control" name="unitrate" placeholder="Unit Rate">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="exampleInputCity1"></label>
-                                                        <input type="number" class="form-control" name="amount" placeholder="Total Amount">
+                                                        <input type="number"  min="0" step="100000" class="form-control" name="amount" placeholder="Total Amount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,10 +230,6 @@
                                     </div>
 
                                 </div><br>
-                                <div class="form-group">
-                                    <label for="exampleInputCity1">The Sum OF</label>
-                                    <input type="text" class="form-control" id="sum" placeholder="The Sum Of">
-                                </div>
                                 <button type="button" class="btn btn-gradient-primary me-2" onclick="preview()">Submit</button>
                                 <button class="btn btn-light" type="button">Cancel</button>
                             </form>
@@ -311,7 +307,7 @@
                                         ACCOUNT NAME &ensp; : ANUGRAH SEMPURNA TRANS, CV
                                     </div>
                                     <div class="textbottom">
-                                        ACCOUNT NO &emsp;&emsp; : 157 3888891
+                                        ACCOUNT NO &emsp;&emsp; : 157 3****91
                                     </div>
                                     <div class="textbottom">
                                         SWIFT CODE &emsp;&emsp;&ensp; : CENAIDJA
@@ -417,6 +413,7 @@
                 var qtyArr = [];
                 var amountArr = [];
                 var unitrateArr = [];
+                var total = 0;
                 var html = '';
                 $("input[name='doc']").each(function() {
                     docArr.push($(this).val());
@@ -430,12 +427,15 @@
                 $("input[name='amount']").each(function() {
                     amountArr.push($(this).val());
                 });
+                for (let i = 0; i < amountArr.length; i++) {
+                    total += parseFloat(amountArr[i]);
+                }
                 for (let i = 0; i < qtyArr.length; i++) {
                     html += `<tr class="addedRow">
                             <td class="tg-0pky" style=" border-color: inherit;text-align: left;vertical-align: top;border-style: solid;">` + docArr[i] + `</td>
                             <td class="tg-0pky" style=" border-color: inherit;text-align: left;vertical-align: top;border-style: solid;">` + parseInt(qtyArr[i]).toFixed(2) + `</td>
-                            <td class="tg-0pky" style=" border-color: inherit;text-align: left;vertical-align: top;border-style: solid;"> IDR ` + unitrateArr[i] + `</td>
-                            <td class="tg-0pky" style=" border-color: inherit;text-align: left;vertical-align: top;border-style: solid;"> IDR ` + amountArr[i] + `</td>
+                            <td class="tg-0pky" style=" border-color: inherit;text-align: left;vertical-align: top;border-style: solid;"> IDR ` + currencyFormat(String(unitrateArr[i])) + `</td>
+                            <td class="tg-0pky" style=" border-color: inherit;text-align: left;vertical-align: top;border-style: solid;"> IDR ` + currencyFormat(String(amountArr[i])) + `</td>
                         </tr>`
                 }
                 html += `                                       <tr class="addedRow">
@@ -450,9 +450,9 @@
                 document.getElementById('blNoSpan').innerHTML = 'B/L No: ' + $("input[id=blno]").val();
                 document.getElementById('podSpan').innerHTML = 'P.O.D: ' + $("input[id=pod]").val();
                 document.getElementById('vesselSpan').innerHTML = 'VESSEL: ' + $("input[id=vessel]").val();
-                document.getElementById('sum1Span').innerHTML = 'IDR ' + $("input[id=sum]").val();
-                document.getElementById('sum2Span').innerHTML = 'IDR ' + $("input[id=sum]").val();
-                document.getElementById('jobDescSpan').innerHTML = $("input[id=jobDescription]").val();
+                document.getElementById('sum1Span').innerHTML = 'IDR ' + currencyFormat(String(total));
+                document.getElementById('sum2Span').innerHTML = 'IDR ' + currencyFormat(String(total));
+                document.getElementById('jobDescSpan').innerHTML = 'Job Description : ' + $("input[id=jobDescription]").val();
 
                 $('#ModalPreview').modal('show');
             }
@@ -488,27 +488,24 @@
             }
 
             function print() {
-                html2canvas(element, {
-                    background: '#FFFFFF',
-                    onrendered: function(canvas) {
-                        getCanvas = canvas;
-                        var imgageData = getCanvas.toDataURL("image/png");
-                        var imgWidth = (canvas.width * 60) / 240;
-                        var imgHeight = (canvas.height * 70) / 240;
-                        var a = document.createElement("a");
-                        a.href = imgageData; //Image Base64 Goes here
-                        a.download = "Image.png"; //File name Here
-                        // var doc = new jsPDF('p', 'mm');
-                        // doc.addImage(imgageData, 'PNG', 0, 0);
-                        // var output = doc.output('datauristring');
-                        a.click(); //Downloaded file
+                window.frames["print_frame"].document.body.innerHTML = document.getElementById('printText').innerHTML;
+                setTimeout(() => {
+                    window.frames["print_frame"].window.focus();
+                    window.frames["print_frame"].window.print();
+                }, 400);
+            }
+            
 
-                        // createInvoice(file)
-
-                        // return btoa(output);
-                        // doc.save('sample-file.pdf');
-                    }
-                });
+            function currencyFormat(val) {
+                let parts = val.split(".");
+                let v = parts[0].replace(/\D/g, ""),
+                    dec = parts[1]
+                let calc_num = Number((dec !== undefined ? v + "." + dec : v));
+                // use this for numeric calculations
+                // console.log('number for calculations: ', calc_num);
+                let n = new Intl.NumberFormat('en-EN').format(v);
+                n = dec !== undefined ? n + "." + dec : n;
+                return n
             }
         </script>
         <!-- End custom js for this page -->

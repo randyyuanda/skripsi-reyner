@@ -5461,21 +5461,21 @@ fieldset:disabled .btn {
 
 .btn-primary {
     color: #000;
-    background-color: #b66dff;
-    border-color: #b66dff;
+    background-color: #DA155A;
+    border-color: #DA155A;
 }
 .btn-primary:hover {
     color: #000;
-    background-color: #c183ff;
-    border-color: #bd7cff;
+    background-color: #DA155A;
+    border-color: #DA155A;
 }
 .btn-check:focus + .btn-primary,
 .btn-primary:focus {
     color: #000;
-    background-color: #c183ff;
-    border-color: #bd7cff;
-    -webkit-box-shadow: 0 0 0 0.25rem rgba(155, 93, 217, 0.5);
-    box-shadow: 0 0 0 0.25rem rgba(155, 93, 217, 0.5);
+    background-color: #DA155A;
+    border-color: #DA155A;
+    -webkit-box-shadow: 0 0 0 0.25rem rgba(217, 93, 93, 0.5);
+    box-shadow: 0 0 0 0.25rem rgba(217, 93, 93, 0.5);
 }
 .btn-check:checked + .btn-primary,
 .btn-check:active + .btn-primary,
@@ -5483,16 +5483,16 @@ fieldset:disabled .btn {
 .btn-primary.active,
 .show > .btn-primary.dropdown-toggle {
     color: #000;
-    background-color: #c58aff;
-    border-color: #bd7cff;
+    background-color: #DA155A;
+    border-color: #DA155A;
 }
 .btn-check:checked + .btn-primary:focus,
 .btn-check:active + .btn-primary:focus,
 .btn-primary:active:focus,
 .btn-primary.active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
-    -webkit-box-shadow: 0 0 0 0.25rem rgba(155, 93, 217, 0.5);
-    box-shadow: 0 0 0 0.25rem rgba(155, 93, 217, 0.5);
+    -webkit-box-shadow: 0 0 0 0.25rem rgba(210, 41, 72, 0.5);
+    box-shadow: 0 0 0 0.25rem rgba(210, 41, 72, 0.5);
 }
 .btn-primary:disabled,
 .btn-primary.disabled {
@@ -5796,8 +5796,8 @@ fieldset:disabled .btn {
 }
 
 .btn-outline-primary {
-    color: #b66dff;
-    border-color: #b66dff;
+    color: #ff6d6d;
+    border-color: #ff6d6d;
 }
 .btn-outline-primary:hover {
     color: #000;
@@ -16228,8 +16228,8 @@ code {
 }
 .btn-primary:not(.btn-light):focus,
 .btn-primary:not(.btn-light):active {
-    background: #b66dff;
-    border-color: #b66dff;
+    background: #DA155A!important;
+    border-color: #DA155A!important;
 }
 
 .btn-outline-primary:hover,

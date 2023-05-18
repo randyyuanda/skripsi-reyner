@@ -71,17 +71,7 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">My Bookings</h4>
-                <div id="info">
-                  <select class="form-select" id="mySelect" onchange="myFunction()">
-                    <option>Select Year</option>
-                    <?php
-                    $years = range(2000, strftime("%Y", time() + 20));
-                    foreach ($years as $year) : ?>
-                      <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
+                <h4 style="font-size:28px; font-weight:bold;" class="card-title">My Bookings  |  {{ date('Y') }}</h4>
                 <canvas id="chartJSContainer" width="600" height="250"></canvas>
 
                 <!-- <canvas id="barChart" style="height:250px"></canvas> -->
@@ -150,12 +140,12 @@
               datasets: [{
                   label: 'On Going',
                   data: data[0],
-                  backgroundColor: 'red'
+                  backgroundColor: '#ffbf96'
                 },
                 {
                   label: 'Completed',
                   data: data[1],
-                  backgroundColor: 'blue'
+                  backgroundColor: '#198ae3'
                 }
               ]
             },

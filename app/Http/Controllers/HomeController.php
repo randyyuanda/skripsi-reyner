@@ -28,8 +28,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $ongoing = Booking::where('users_id', Auth::user()->id)->count();
-        $completed = Booking::where('users_id', Auth::user()->id)->count();
+        $ongoing = Booking::where('users_id', Auth::user()->id)->where('status', '!=', 'Shipment Completed')->count();
+        $completed = Booking::where('users_id', Auth::user()->id)->where('status','Waiting')->count();
 
         return view('/client/dashboard-klien', [
             "title" => "home",
@@ -46,7 +46,7 @@ class HomeController extends Controller
         $counttotalcanceledshipment = 0;
         foreach ($listklien as $klien) {
             $counttotalshipment += Booking::where('users_id', $klien->id)->get()->count();
-            $counttotalwaitingshipment += Booking::where('users_id', $klien->id)->where('status', '!=', 'CANCELED')->get()->count();
+            $counttotalwaitingshipment += Booking::where('users_id', $klien->id)->where('status', 'Waiting')->get()->count();
             $counttotalcanceledshipment +=  Booking::where('users_id', $klien->id)->where('status', 'CANCELED')->get()->count();
         }
         return view('/admin/dashboard-admin', [
@@ -66,9 +66,9 @@ class HomeController extends Controller
         ]);
     }
 
-    public function klienAdmin()
+    public function klienAdmin(Request $request)
     {
-        $listklien = User::where('role', 'klien')->get();
+        $listklien = User::where('role', 'klien')->where('name', 'like', "%".$request->search . "%")->get();
         foreach ($listklien as $klien) {
             $klien->total_shipment = Booking::where('users_id', $klien->id)->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year)->get()->count();
         }
@@ -78,11 +78,11 @@ class HomeController extends Controller
         ]);
     }
 
-    public function detailKlienAdmin($id)
+    public function detailKlienAdmin(Request $request, $id)
     {
         $klien = User::where('role', 'klien')->where('id', $id)->first();
         if ($klien) {
-            $listbooking = Booking::where('users_id', $klien->id)->get();
+            $listbooking = Booking::where('users_id', $klien->id)->orderBy('created_at', 'desc')->where('status', 'like', "%".$request->search . "%")->paginate(10);
             $counttotalmonthlyshipment = Booking::where('users_id', $klien->id)->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year)->get()->count();
             $counttotalallshipment = Booking::where('users_id', $klien->id)->get()->count();
             foreach ($listbooking as $book) {
@@ -128,6 +128,15 @@ class HomeController extends Controller
         ]);
     }
 
+    public function updateAdmin($admin_id)
+    {
+        $admin = User::where('id', $admin_id)->first();
+        return view('/admin/update-admin', [
+            "title" => "home",
+            "admin" => $admin
+        ]);
+    }
+
     public function createAdmin()
     {
         return view('/admin/create-admin', [
@@ -135,9 +144,12 @@ class HomeController extends Controller
         ]);
     }
 
-    public function allBook()
+    public function allBook(Request $request)
     {
-        $listbooking = Booking::orderBy('date_shipment', 'desc')->get();
+        $listbooking = Booking::whereHas('user', function ($users) use ($request) {
+            $users->where('name', 'like', "%".$request->search . "%")->orwhere('status', 'like', "%".$request->search . "%");
+        })->orderBy('created_at', 'desc')->paginate(10);
+
         foreach ($listbooking as $book) {
             $book->nama_klien = User::where('id', $book->users_id)->first()->name;
         }
@@ -147,9 +159,9 @@ class HomeController extends Controller
         ]);
     }
 
-    public function listbooking()
+    public function listbooking(Request $request)
     {
-        $listbook = Booking::where('users_id', Auth::user()->id)->orderBy('date_shipment', 'desc')->get();
+        $listbook = Booking::where('users_id', Auth::user()->id)->orderBy('created_at', 'desc')->where('status', 'like', "%".$request->search . "%")->paginate(10);
         foreach ($listbook as $book) {
             $book->nama_klien = User::where('id', $book->users_id)->first()->name;
         }

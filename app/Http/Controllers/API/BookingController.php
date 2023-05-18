@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use PDO;
 
 class BookingController extends Controller
@@ -18,6 +19,7 @@ class BookingController extends Controller
     $listbooking = Booking::orderBy('orders_id', 'desc')->where('users_id', Auth::user()->id)->get();
     return response()->json($listbooking);
   }
+  
   public function createBooking(Request $request)
   {
     $request->validate([
@@ -82,9 +84,9 @@ class BookingController extends Controller
   public function monthlyShipment($year)
   {
     // Not Completed
-    $book = Booking::where('date_shipment', 'like', $year . '%')->where('status', '!=', 'Shipment Completed')->get()
+    $book = Booking::where('created_at', 'like', $year . '%')->where('status', '!=', 'Shipment Completed')->where('status' , '!=', 'Canceled')->get()
       ->groupBy(function ($date) {
-        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+        return Carbon::parse($date->created_at)->format('m'); // grouping by months
       });
     $bookmcount = [];
     $bookArrNotCompleted = [];
@@ -102,9 +104,9 @@ class BookingController extends Controller
     }
 
     // Completed
-    $bookCompleted = Booking::where('date_shipment', 'like', $year . '%')->where('status', 'Shipment Completed')->get()
+    $bookCompleted = Booking::where('created_at', 'like', $year . '%')->where('status', 'Shipment Completed')->get()
       ->groupBy(function ($date) {
-        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+        return Carbon::parse($date->created_at)->format('m'); // grouping by months
       });
     $bookmcountCompleted = [];
     $bookArrCompleted = [];
@@ -120,15 +122,35 @@ class BookingController extends Controller
         array_push($bookArrCompleted, 0);
       }
     }
-    return response()->json([$bookArrNotCompleted, $bookArrCompleted]);
+  
+    // Canceled
+    $bookCanceled = Booking::where('created_at', 'like', $year . '%')->where('status', 'Canceled')->get()
+      ->groupBy(function ($date) {
+        return Carbon::parse($date->created_at)->format('m'); // grouping by months
+      });
+    $bookmcountCanceled = [];
+    $bookArrCanceled = [];
+
+    foreach ($bookCanceled as $key => $value) {
+      $bookmcountCanceled[(int)$key] = count($value);
+    }
+
+    for ($i = 1; $i <= 12; $i++) {
+      if (!empty($bookmcountCanceled[$i])) {
+        array_push($bookArrCanceled, $bookmcountCanceled[$i]);
+      } else {
+        array_push($bookArrCanceled, 0);
+      }
+    }
+    return response()->json([$bookArrNotCompleted, $bookArrCompleted, $bookArrCanceled]);
   }
 
   public function monthlyShipmentKlien($klien, $year)
   {
     // Not Completed
-    $book = Booking::where('date_shipment', 'like', $year . '%')->where('status', '!=', 'Shipment Completed')->where('users_id', $klien)->get()
+    $book = Booking::where('created_at', 'like', $year . '%')->where('status', '!=', 'Shipment Completed')->where('users_id', $klien)->get()
       ->groupBy(function ($date) {
-        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+        return Carbon::parse($date->created_at)->format('m'); // grouping by months
       });
     $bookmcount = [];
     $bookArrNotCompleted = [];
@@ -146,9 +168,9 @@ class BookingController extends Controller
     }
 
     // Completed
-    $bookCompleted = Booking::where('date_shipment', 'like', $year . '%')->where('status', 'Shipment Completed')->where('users_id', $klien)->get()
+    $bookCompleted = Booking::where('created_at', 'like', $year . '%')->where('status', 'Shipment Completed')->where('users_id', $klien)->get()
       ->groupBy(function ($date) {
-        return Carbon::parse($date->date_shipment)->format('m'); // grouping by months
+        return Carbon::parse($date->created_at)->format('m'); // grouping by months
       });
     $bookmcountCompleted = [];
     $bookArrCompleted = [];
